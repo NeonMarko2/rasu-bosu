@@ -3,16 +3,24 @@ local editor = {}
 local camera_pos = Vector.new(0, 0)
 local camera_speed = 75
 
-function drawGrid()
+local DEFAULT_GRID_SIZE = 40
+
+local function drawGrid(grid_size)
 	love.graphics.push()
-	local GRID_SIZE = 40
+
+	grid_size = grid_size or DEFAULT_GRID_SIZE
+
 	love.graphics.translate(
-		-math.floor(camera_pos.x / GRID_SIZE) * GRID_SIZE,
-		-math.floor(camera_pos.y / GRID_SIZE) * GRID_SIZE
+		-math.floor(camera_pos.x / grid_size) * grid_size,
+		-math.floor(camera_pos.y / grid_size) * grid_size
 	)
-	for x = -1, 20, 1 do
-		for y = -1, 20, 1 do
-			love.graphics.rectangle("line", x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE)
+
+	local GRID_HORIZONTAL_LENGTH = love.graphics.getWidth() / grid_size
+	local GRID_VERTICAL_LENGTH = love.graphics.getHeight() / grid_size
+
+	for x = -1, GRID_HORIZONTAL_LENGTH, 1 do
+		for y = -1, GRID_VERTICAL_LENGTH, 1 do
+			love.graphics.rectangle("line", x * grid_size, y * grid_size, grid_size, grid_size)
 		end
 	end
 	love.graphics.pop()
@@ -39,7 +47,7 @@ end
 function editor:draw()
 	love.graphics.push()
 	love.graphics.translate(camera_pos.x, camera_pos.y)
-	drawGrid()
+	drawGrid(40)
 	love.graphics.pop()
 end
 
