@@ -20,6 +20,7 @@ input.action_began = Signal.new()
 input.action_ended = Signal.new()
 input.input_began = Signal.new()
 input.input_ended = Signal.new()
+input.scrolled = Signal.new()
 
 ---@param key string
 ---@param input_state string
@@ -33,6 +34,10 @@ function input:sendInput(key, input_state)
 		input.state[key] = nil
 		input.input_ended(key)
 	end
+end
+
+function input:sendScrolled(x, y)
+	input.scrolled(x, y)
 end
 
 function input:group()
