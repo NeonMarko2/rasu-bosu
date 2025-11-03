@@ -13,14 +13,17 @@ Input.scrolled.sub(function(x, y)
 end)
 
 function intState:update(dt)
+	local camera_pos = editor:getCamera()
 	if love.mouse.isDown(1) then
 		grid_x, grid_y = love.mouse.getPosition()
+		grid_x, grid_y = grid_x - camera_pos.x, grid_y - camera_pos.y
 		grid_x, grid_y = math.floor(grid_x / 40), math.floor(grid_y / 40)
 
 		grid_data[grid_x] = grid_data[grid_x] or {}
 		grid_data[grid_x][grid_y] = current_value
 	elseif love.mouse.isDown(2) then
 		grid_x, grid_y = love.mouse.getPosition()
+		grid_x, grid_y = grid_x - camera_pos.x, grid_y - camera_pos.y
 		grid_x, grid_y = math.floor(grid_x / 40), math.floor(grid_y / 40)
 
 		if grid_data[grid_x] then
@@ -31,7 +34,8 @@ end
 
 function intState:draw()
 	local x, y = love.mouse.getPosition()
-
+	local camera_pos = editor:getCamera()
+	x, y = x - camera_pos.x, y - camera_pos.y
 	x = math.floor(x / 40) * 40
 	y = math.floor(y / 40) * 40
 

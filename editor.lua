@@ -9,6 +9,10 @@ local editing_state = require("gridint_state")
 
 local STATE_IDENTIFIER_FONT = love.graphics.newFont(30, "mono", 5)
 
+function editor:getCamera()
+	return camera_pos
+end
+
 function editor:drawStateIdentifier(colored_text)
 	love.graphics.push()
 	love.graphics.translate(-camera_pos.x, -camera_pos.y)

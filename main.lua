@@ -6,7 +6,6 @@ local editor = require("editor")
 
 function love.load()
 	editor:load()
-	print(love.system.getOS())
 end
 
 function love.update(dt)
