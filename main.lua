@@ -2,6 +2,7 @@ Vector = require("libs.vectors")
 Signal = require("libs.signal")
 Console = require("libs.console")
 Input = require("libs.input")
+Serializer = require("libs.jsonlizer")
 local editor = require("editor")
 
 function love.load()
@@ -10,6 +11,10 @@ end
 
 function love.update(dt)
 	editor:update(dt)
+end
+
+function love.keypressed(key)
+	Input:sendInput(key, "began")
 end
 
 function love.wheelmoved(x, y)
