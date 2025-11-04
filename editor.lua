@@ -1,9 +1,13 @@
 editor = {}
 
+editor.level_data = {}
+
 local camera_pos = Vector.new(0, 0)
 local camera_speed = 75
 
 local DEFAULT_GRID_SIZE = 40
+
+editor.export_requested = Signal.new()
 
 editor.utility = {}
 editor.utility.grid = require("editor_utils.grid")
@@ -11,6 +15,15 @@ editor.utility.grid = require("editor_utils.grid")
 local editing_state = require("gridint_state")
 
 local STATE_IDENTIFIER_FONT = love.graphics.newFont(30, "mono", 5)
+
+Input.input_began.sub(function(key)
+	if key == "o" then
+		editor.export_requested()
+		file = io.open("exported_level.json", "w")
+		file:write(TableToJson(editor.level_data))
+		io.close(file)
+	end
+end)
 
 function editor:getCamera()
 	return camera_pos

@@ -12,6 +12,16 @@ Input.scrolled.sub(function(x, y)
 	current_value = math.max(current_value + y, 1)
 end)
 
+editor.export_requested.sub(function()
+	local data = {}
+	for x, collumn in pairs(grid_data) do
+		for y, value in pairs(collumn) do
+			data[#data + 1] = { x, y, value }
+		end
+	end
+	editor.level_data.int_grid = data
+end)
+
 local grid = editor.utility.grid.newGrid(40)
 
 function intState:update(dt)

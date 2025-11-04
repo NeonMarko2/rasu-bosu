@@ -1,7 +1,45 @@
 ---@param table_to_parse table
 ---@return string
+local function ArrayToJson(table_to_parse)
+	local json = "[ "
+
+	local first_iteration = true
+	for _, value in ipairs(table_to_parse) do
+		local data_separation = ","
+		if first_iteration == true then
+			first_iteration = false
+			data_separation = ""
+		end
+		if type(value) == "string" then
+			value = '"' .. value .. '"'
+		end
+		if type(value) == "table" then
+			local is_array = #value > 0
+			local parsed_table = nil
+
+			if is_array then
+				parsed_table = ArrayToJson(value)
+			else
+				parsed_table = TableToJson(value)
+			end
+
+			value = parsed_table
+		end
+
+		json = json .. data_separation
+		json = json .. '"' .. tostring(key) .. '":'
+		json = json .. value
+	end
+
+	json = json .. " ]"
+	return json
+end
+
+---@param table_to_parse table
+---@return string
 function TableToJson(table_to_parse)
 	local json = "{ "
+
 	local first_iteration = true
 	for key, value in pairs(table_to_parse) do
 		local data_separation = ","
@@ -10,16 +48,26 @@ function TableToJson(table_to_parse)
 			data_separation = ""
 		end
 		if type(value) == "string" then
-			json = json .. data_separation .. '"' .. tostring(key) .. '":"' .. value .. '"'
-		end
-		if type(value) == "number" or type(value) == "boolean" then
-			json = json .. data_separation .. '"' .. tostring(key) .. '":' .. value
+			value = '"' .. value .. '"'
 		end
 		if type(value) == "table" then
-			local parsed_table = TableToJson(value)
-			json = json .. data_separation .. '"' .. tostring(key) .. '":' .. parsed_table
+			local is_array = #value > 0
+			local parsed_table = nil
+
+			if is_array then
+				parsed_table = ArrayToJson(value)
+			else
+				parsed_table = TableToJson(value)
+			end
+
+			value = parsed_table
 		end
+
+		json = json .. data_separation
+		json = json .. '"' .. tostring(key) .. '":'
+		json = json .. value
 	end
+
 	json = json .. " }"
 	return json
 end
