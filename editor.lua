@@ -5,6 +5,9 @@ local camera_speed = 75
 
 local DEFAULT_GRID_SIZE = 40
 
+editor.utility = {}
+editor.utility.grid = require("editor_utils.grid")
+
 local editing_state = require("gridint_state")
 
 local STATE_IDENTIFIER_FONT = love.graphics.newFont(30, "mono", 5)

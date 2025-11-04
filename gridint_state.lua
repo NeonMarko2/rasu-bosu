@@ -12,19 +12,19 @@ Input.scrolled.sub(function(x, y)
 	current_value = math.max(current_value + y, 1)
 end)
 
+local grid = editor.utility.grid.newGrid(40)
+
 function intState:update(dt)
 	local camera_pos = editor:getCamera()
 	if love.mouse.isDown(1) then
-		grid_x, grid_y = love.mouse.getPosition()
-		grid_x, grid_y = grid_x - camera_pos.x, grid_y - camera_pos.y
-		grid_x, grid_y = math.floor(grid_x / 40), math.floor(grid_y / 40)
+		local mouse_x, mouse_y = love.mouse.getPosition()
+		grid_x, grid_y = grid:mouseToGrid(mouse_x, mouse_y, camera_pos)
 
 		grid_data[grid_x] = grid_data[grid_x] or {}
 		grid_data[grid_x][grid_y] = current_value
 	elseif love.mouse.isDown(2) then
-		grid_x, grid_y = love.mouse.getPosition()
-		grid_x, grid_y = grid_x - camera_pos.x, grid_y - camera_pos.y
-		grid_x, grid_y = math.floor(grid_x / 40), math.floor(grid_y / 40)
+		local mouse_x, mouse_y = love.mouse.getPosition()
+		grid_x, grid_y = grid:mouseToGrid(mouse_x, mouse_y, Vector.new(camera_pos.x, camera_pos.y))
 
 		if grid_data[grid_x] then
 			grid_data[grid_x][grid_y] = nil
@@ -33,19 +33,15 @@ function intState:update(dt)
 end
 
 function intState:draw()
-	local x, y = love.mouse.getPosition()
+	local mouse_x, mouse_y = love.mouse.getPosition()
 	local camera_pos = editor:getCamera()
-	x, y = x - camera_pos.x, y - camera_pos.y
-	x = math.floor(x / 40) * 40
-	y = math.floor(y / 40) * 40
+	local x, y = grid:mouseToGrid(mouse_x, mouse_y, camera_pos)
 
-	love.graphics.rectangle("fill", x, y, 40, 40)
+	love.graphics.rectangle("fill", x * 40, y * 40, 40, 40)
 
-	local count = 0
 	love.graphics.setColor(1, 1, 1, 0.3)
 	for _x, collumn in pairs(grid_data) do
 		for _y, item in pairs(collumn) do
-			count = count + 1
 			if COLOR_OF_VALUE[item] then
 				love.graphics.setColor(COLOR_OF_VALUE[item])
 			else
