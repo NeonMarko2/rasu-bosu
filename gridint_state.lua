@@ -28,6 +28,10 @@ editor.export_requested.sub(function()
 	editor.level_data.int_grid = data
 end)
 
+local frame = editor.utility.gui:newFrame(
+	Vector.new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2),
+	Vector.new(200, 200)
+)
 local grid = editor.utility.grid.newGrid(40)
 
 function intState:update(dt)
@@ -77,7 +81,7 @@ function intState:draw()
 	love.graphics.translate(0, -50)
 	editor.utility.gui:drawLabel(current_int, Vector.new(0, love.graphics.getHeight()))
 	love.graphics.pop()
-	-- frame:draw()
+	frame:draw()
 end
 
 return intState
