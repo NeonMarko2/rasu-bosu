@@ -70,13 +70,13 @@ function intState:draw()
 			love.graphics.printf(item, _x * grid.cell_size, _y * grid.cell_size, grid.cell_size, "center")
 		end
 	end
-	-- love.graphics.push()
-	-- love.graphics.setColor(1, 1, 1, 1)
-	-- love.graphics.translate(0, -50)
-	-- editor.utility.gui:drawLabel("Grid Intiger Mode", Vector.new(0, love.graphics.getHeight()))
-	-- love.graphics.translate(0, -50)
-	-- editor.utility.gui:drawLabel(current_int, Vector.new(0, love.graphics.getHeight()))
-	-- love.graphics.pop()
+	love.graphics.push()
+	love.graphics.setColor(1, 1, 1, 1)
+	love.graphics.translate(0, -50)
+	editor.utility.gui:drawLabel("Grid Intiger Mode", Vector.new(0, love.graphics.getHeight()))
+	love.graphics.translate(0, -50)
+	editor.utility.gui:drawLabel(current_int, Vector.new(0, love.graphics.getHeight()))
+	love.graphics.pop()
 	-- frame:draw()
 end
 

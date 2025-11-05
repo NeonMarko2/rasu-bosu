@@ -9,7 +9,7 @@ editor.export_requested = Signal.new()
 
 editor.utility = {}
 editor.utility.grid = require("editor_utils.grid")
--- editor.utility.gui = require("editor_utils.gui")
+editor.utility.gui = require("editor_utils.gui")
 
 local editing_state = require("gridint_state")
 
