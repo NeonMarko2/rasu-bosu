@@ -15,19 +15,15 @@ local function ArrayToJson(table_to_parse)
 		end
 		if type(value) == "table" then
 			local is_array = #value > 0
-			local parsed_table = nil
 
 			if is_array then
-				parsed_table = ArrayToJson(value)
+				value = ArrayToJson(value)
 			else
-				parsed_table = TableToJson(value)
+				value = TableToJson(value)
 			end
-
-			value = parsed_table
 		end
 
 		json = json .. data_separation
-		json = json .. '"' .. tostring(key) .. '":'
 		json = json .. value
 	end
 
