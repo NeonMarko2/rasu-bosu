@@ -15,6 +15,10 @@ end
 
 function love.keypressed(key)
 	Input:sendInput(key, "began")
+
+	if key == "escape" then
+		love.event.quit(0)
+	end
 end
 
 function love.wheelmoved(x, y)
