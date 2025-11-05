@@ -4,7 +4,14 @@ local gui = {}
 ---@field position Vector
 ---@field scale Vector
 local frame = { color = { 0, 0, 0, 0.25 }, outline = { 1, 1, 1, 1 }, elements = {} }
+---@private
 frame.__index = frame
+
+local TYPE_LABEL = 1
+
+function frame:addLabel(text, position)
+	self.elements[#self.elements + 1] = { type = TYPE_LABEL, position = position, text = text }
+end
 
 local FRAME_HEADER_FONT = love.graphics.newFont(20, "mono", 5)
 
@@ -33,9 +40,17 @@ local function drawHeader(frame)
 	)
 end
 
+local function drawElement(element)
+	if element.type == TYPE_LABEL then
+		love.graphics.setColor(1, 1, 1, 1)
+		love.graphics.print(element.text)
+		love.graphics.translate(0, love.graphics.getFont():getHeight())
+	end
+end
+
 function frame:draw()
 	love.graphics.translate(-editor.camera.x, -editor.camera.y)
-	love.graphics.translate(self.position.x - self.scale.x / 3, self.position.y - self.scale.y / 2)
+	love.graphics.translate(self.position.x - self.scale.x / 2, self.position.y - self.scale.y / 2)
 
 	if frame.title then
 		setHeaderStencil(self)
@@ -45,6 +60,12 @@ function frame:draw()
 	love.graphics.rectangle("fill", 0, 0, self.scale.x, self.scale.y, 5, 5)
 	love.graphics.setColor(self.outline)
 	love.graphics.rectangle("line", 0, 0, self.scale.x, self.scale.y, 5, 5)
+
+	love.graphics.translate(5, 2)
+
+	for index, value in ipairs(self.elements) do
+		drawElement(value)
+	end
 
 	if frame.title then
 		drawHeader(self)

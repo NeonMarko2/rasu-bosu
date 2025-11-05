@@ -32,6 +32,10 @@ local frame = editor.utility.gui:newFrame(
 	Vector.new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2),
 	Vector.new(200, 200)
 )
+frame:addLabel("This is a frame")
+frame:addLabel("This is a frame", Vector.new(50, 25))
+frame:addLabel("This is a frame")
+
 local grid = editor.utility.grid.newGrid(40)
 
 function intState:update(dt)
