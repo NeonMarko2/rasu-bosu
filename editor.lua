@@ -2,64 +2,25 @@ editor = {}
 
 editor.level_data = {}
 
-local camera_pos = Vector.new(0, 0)
+editor.camera = Vector.new(0, 0)
 local camera_speed = 75
-
-local DEFAULT_GRID_SIZE = 40
 
 editor.export_requested = Signal.new()
 
 editor.utility = {}
 editor.utility.grid = require("editor_utils.grid")
+-- editor.utility.gui = require("editor_utils.gui")
 
 local editing_state = require("gridint_state")
-
-local STATE_IDENTIFIER_FONT = love.graphics.newFont(30, "mono", 5)
 
 Input.input_began.sub(function(key)
 	if key == "o" then
 		editor.export_requested()
-		file = io.open("exported_level.json", "w")
+		local file = io.open("exported_level.json", "w")
 		file:write(TableToJson(editor.level_data))
 		io.close(file)
 	end
 end)
-
-function editor:getCamera()
-	return camera_pos
-end
-
-function editor:drawStateIdentifier(colored_text)
-	love.graphics.push()
-	love.graphics.translate(-camera_pos.x, -camera_pos.y)
-	love.graphics.translate(0, love.graphics.getHeight())
-	love.graphics.setColor(0, 0, 0, 0.8)
-	love.graphics.rectangle("fill", 0, -50, STATE_IDENTIFIER_FONT:getWidth(colored_text[1]) + 25, 50)
-	love.graphics.setColor(1, 1, 1, 1)
-	love.graphics.printf(colored_text, STATE_IDENTIFIER_FONT, 10, -50, 999, "left")
-	love.graphics.pop()
-end
-
-local function drawGrid(grid_size)
-	love.graphics.push()
-
-	grid_size = grid_size or DEFAULT_GRID_SIZE
-
-	love.graphics.translate(
-		-math.floor(camera_pos.x / grid_size) * grid_size,
-		-math.floor(camera_pos.y / grid_size) * grid_size
-	)
-
-	local GRID_HORIZONTAL_LENGTH = love.graphics.getWidth() / grid_size
-	local GRID_VERTICAL_LENGTH = love.graphics.getHeight() / grid_size
-
-	for x = -1, GRID_HORIZONTAL_LENGTH, 1 do
-		for y = -1, GRID_VERTICAL_LENGTH, 1 do
-			love.graphics.rectangle("line", x * grid_size, y * grid_size, grid_size, grid_size)
-		end
-	end
-	love.graphics.pop()
-end
 
 function editor:load() end
 
@@ -76,7 +37,7 @@ function editor:update(dt)
 		camera_move_y = camera_move_y + 1
 	end
 
-	camera_pos = camera_pos - Vector.new(camera_move_x, camera_move_y) * camera_speed * dt
+	editor.camera = editor.camera - Vector.new(camera_move_x, camera_move_y) * camera_speed * dt
 
 	if editing_state then
 		editing_state:update(dt)
@@ -85,8 +46,7 @@ end
 
 function editor:draw()
 	love.graphics.push()
-	love.graphics.translate(camera_pos.x, camera_pos.y)
-	drawGrid(40)
+	love.graphics.translate(editor.camera.x, editor.camera.y)
 
 	if editing_state then
 		editing_state:draw()

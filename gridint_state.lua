@@ -1,15 +1,21 @@
 local intState = {}
 
 local grid_data = {}
-local draw_mode = "solid"
+local current_int = 3
 
-local current_value = 3
+local COLOR_OF_VALUE = {
+	{ 1, 1, 1, 0.3 },
+	{ 0.2, 0.8, 0.2, 0.3 },
+	{ 0.8, 0.2, 0.2, 0.3 },
+	{ 0.2, 0.2, 0.8, 0.3 },
+	{ 0.5, 0.5, 0.2, 0.3 },
+	{ 0.5, 0.8, 0.5, 0.3 },
+	{ 0.2, 0.8, 0.8, 0.3 },
+	{ 0.8, 0.2, 0.8, 0.3 },
+}
 
-local COLOR_OF_VALUE =
-	{ { 1, 1, 1, 0.3 }, { 0.2, 0.8, 0.2, 0.3 }, { 0.8, 0.2, 0.2, 0.3 }, { 0.2, 0.2, 0.8, 0.3 }, { 0.5, 0.5, 0.2, 0.3 } }
-
-Input.scrolled.sub(function(x, y)
-	current_value = math.max(current_value + y, 1)
+Input.scrolled.sub(function(_, y)
+	current_int = math.max(current_int + y, 1)
 end)
 
 editor.export_requested.sub(function()
@@ -25,16 +31,13 @@ end)
 local grid = editor.utility.grid.newGrid(40)
 
 function intState:update(dt)
-	local camera_pos = editor:getCamera()
 	if love.mouse.isDown(1) then
-		local mouse_x, mouse_y = love.mouse.getPosition()
-		grid_x, grid_y = grid:mouseToGrid(mouse_x, mouse_y, camera_pos)
+		local grid_x, grid_y = grid:mouseToGrid()
 
 		grid_data[grid_x] = grid_data[grid_x] or {}
-		grid_data[grid_x][grid_y] = current_value
+		grid_data[grid_x][grid_y] = current_int
 	elseif love.mouse.isDown(2) then
-		local mouse_x, mouse_y = love.mouse.getPosition()
-		grid_x, grid_y = grid:mouseToGrid(mouse_x, mouse_y, Vector.new(camera_pos.x, camera_pos.y))
+		local grid_x, grid_y = grid:mouseToGrid()
 
 		if grid_data[grid_x] then
 			grid_data[grid_x][grid_y] = nil
@@ -43,11 +46,17 @@ function intState:update(dt)
 end
 
 function intState:draw()
-	local mouse_x, mouse_y = love.mouse.getPosition()
-	local camera_pos = editor:getCamera()
-	local x, y = grid:mouseToGrid(mouse_x, mouse_y, camera_pos)
+	local x, y = grid:mouseToGrid()
 
-	love.graphics.rectangle("fill", x * 40, y * 40, 40, 40)
+	love.graphics.rectangle("fill", x * grid.cell_size, y * grid.cell_size, grid.cell_size, grid.cell_size)
+
+	if COLOR_OF_VALUE[current_int] then
+		love.graphics.setColor(COLOR_OF_VALUE[current_int])
+	else
+		love.graphics.setColor(1, 1, 1, 0.3)
+	end
+
+	grid:draw()
 
 	love.graphics.setColor(1, 1, 1, 0.3)
 	for _x, collumn in pairs(grid_data) do
@@ -57,14 +66,18 @@ function intState:draw()
 			else
 				love.graphics.setColor(1, 1, 1, 0.3)
 			end
-			love.graphics.rectangle("fill", _x * 40, _y * 40, 40, 40)
-			love.graphics.printf(item, _x * 40, _y * 40, 40, "center")
+			love.graphics.rectangle("fill", _x * grid.cell_size, _y * grid.cell_size, grid.cell_size, grid.cell_size)
+			love.graphics.printf(item, _x * grid.cell_size, _y * grid.cell_size, grid.cell_size, "center")
 		end
 	end
-	love.graphics.setColor(1, 1, 1, 1)
-	editor:drawStateIdentifier({ "Grid Intiger Mode", { 1, 1, 1, 1 } })
-	love.graphics.translate(0, -50)
-	editor:drawStateIdentifier({ current_value, COLOR_OF_VALUE[current_value] })
+	-- love.graphics.push()
+	-- love.graphics.setColor(1, 1, 1, 1)
+	-- love.graphics.translate(0, -50)
+	-- editor.utility.gui:drawLabel("Grid Intiger Mode", Vector.new(0, love.graphics.getHeight()))
+	-- love.graphics.translate(0, -50)
+	-- editor.utility.gui:drawLabel(current_int, Vector.new(0, love.graphics.getHeight()))
+	-- love.graphics.pop()
+	-- frame:draw()
 end
 
 return intState
