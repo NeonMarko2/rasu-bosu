@@ -3,8 +3,8 @@ local gui = {}
 ---@class Frame
 ---@field position Vector
 ---@field scale Vector
----@field elements table
-local frame = { color = { 0, 0, 0, 0.25 }, outline = { 1, 1, 1, 1 }, elements = {} }
+---@field elements? table
+local frame = { color = { 0, 0, 0, 0.25 }, outline = { 1, 1, 1, 1 }, elements = {}, title = "Title" }
 ---@private
 frame.__index = frame
 
@@ -69,13 +69,14 @@ local function drawElementsAbsolute(frame, elements)
 end
 
 function frame:draw()
+	love.graphics.push()
 	love.graphics.translate(-editor.camera.x, -editor.camera.y)
 	love.graphics.translate(self.position.x - self.scale.x / 2, self.position.y - self.scale.y / 2)
 
 	local content_offset = DEFAULT_FRAME_CONTENTS_OFFSET
 	local content_to_title_offset = Vector.new(0, 0)
 
-	if frame.title then
+	if self.title then
 		setHeaderStencil(self)
 		content_to_title_offset = FRAME_CONTENTS_TO_TITLE_OFFSET
 	end
@@ -97,13 +98,14 @@ function frame:draw()
 
 	love.graphics.pop()
 
-	if frame.title then
+	if self.title then
 		drawHeader(self)
 	end
+	love.graphics.pop()
 end
 
 function gui:newFrame(position, scale)
-	local newFrame = { position = position, scale = scale }
+	local newFrame = { position = position, scale = scale, elements = {} }
 	return setmetatable(newFrame, frame)
 end
 

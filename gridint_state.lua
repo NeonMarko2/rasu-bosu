@@ -28,14 +28,25 @@ editor.export_requested.sub(function()
 	editor.level_data.int_grid = data
 end)
 
-local frame = editor.utility.gui:newFrame(
-	Vector.new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2),
-	Vector.new(200, 200)
-)
+local function createFrame()
+	local frame = editor.utility.gui:newFrame(
+		Vector.new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2),
+		Vector.new(200, 200)
+	)
+	frame:addLabel("Frame this is")
+	frame:addLabel("This is a frame", Vector.new(50, 25))
+	frame:addLabel("This is a frame", Vector.new(-15, 66))
+	return frame
+end
 
-frame["layout"] = 1
-frame:addLabel("Frame this is")
-frame:addLabel("This is a frame", Vector.new(50, 25))
+local frame = createFrame()
+local frame2 = createFrame()
+
+frame2["title"] = "Title"
+frame2.layout = 1
+
+frame.position.x = frame.position.x - 150
+frame2.position.x = frame2.position.x + 150
 
 local grid = editor.utility.grid.newGrid(40)
 
@@ -87,6 +98,7 @@ function intState:draw()
 	editor.utility.gui:drawLabel(current_int, Vector.new(0, love.graphics.getHeight()))
 	love.graphics.pop()
 	frame:draw()
+	frame2:draw()
 end
 
 return intState
