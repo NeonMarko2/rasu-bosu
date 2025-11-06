@@ -5,11 +5,11 @@ checkBox.gui = nil
 function checkBox.new()
 	local newBox = { size = Vector.new(30, 35), value = true, region = nil }
 	local region = checkBox.gui.registerRegion("clickable", Vector.new(3, 5), Vector.new(30, 30))
-	local funct = function()
-		newBox:toggle()
+	local on_click = function()
+		return newBox:toggle()
 	end
 	newBox.region = region
-	newBox.region.activated.sub(funct)
+	newBox.region.activated.sub(on_click)
 	return setmetatable(newBox, checkBox)
 end
 
