@@ -39,6 +39,8 @@ function editor:update(dt)
 
 	editor.camera = editor.camera - Vector.new(camera_move_x, camera_move_y) * camera_speed * dt
 
+	editor.utility.gui:updateRegions()
+
 	if editing_state then
 		editing_state:update(dt)
 	end
@@ -48,10 +50,12 @@ function editor:draw()
 	love.graphics.push()
 	love.graphics.translate(editor.camera.x, editor.camera.y)
 
+	editor.utility.gui.resetRegisters()
 	if editing_state then
 		editing_state:draw()
 	end
 
+	editor.utility.gui:drawRegisters_Debug()
 	love.graphics.pop()
 end
 

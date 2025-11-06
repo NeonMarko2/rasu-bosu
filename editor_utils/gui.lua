@@ -4,7 +4,7 @@ local gui = {}
 ---@field position Vector
 ---@field scale Vector
 ---@field elements? table
-local frame = { color = { 0, 0, 0, 0.25 }, outline = { 1, 1, 1, 1 }, elements = {}, title = "Title" }
+local frame = { color = { 0, 0, 0, 0.25 }, outline = { 1, 1, 1, 1 }, elements = {} }
 ---@private
 frame.__index = frame
 
@@ -54,7 +54,6 @@ end
 ---@return table
 function gui.registerRegion(type, position, size)
 	local region = { type = type, position = position, size = size, activated = Signal.new() }
-	regions[#regions + 1] = region
 	return region
 end
 
@@ -71,30 +70,27 @@ local function isMouseOverRegion(region)
 	return false
 end
 
+local hovering_over = nil
+
+function gui.isOverUi()
+	return hovering_over ~= nil
+end
+
 function gui:updateRegions()
-	local x, y = love.mouse.getPosition()
-	for index, region in ipairs(regions) do
-		if
-			x > region.position.x
-			and x < region.position.x + region.size.x
-			and y > region.position.y
-			and y < region.position.y + region.size.y
-		then
+	for i = #regions, 1, -1 do
+		if isMouseOverRegion(regions[i]) then
+			hovering_over = regions[i]
+			return
 		end
 	end
+	hovering_over = nil
 end
 
 Input.click_began.sub(function()
-	gui.detectClickedRegions()
-end)
-
-function gui.detectClickedRegions()
-	for index, region in ipairs(regions) do
-		if isMouseOverRegion(region) then
-			region.activated()
-		end
+	if hovering_over then
+		hovering_over.activated()
 	end
-end
+end)
 
 local function drawHeader(frame)
 	local font_length = FRAME_HEADER_FONT:getWidth(frame.title)
@@ -110,6 +106,9 @@ end
 local function drawElementsVertically(frame, elements)
 	for index, element in ipairs(elements) do
 		element:draw()
+		if element.region then
+			regions[#regions + 1] = element.region
+		end
 		if frame.layout == GUI_LAYOUTS.VERTICAL then
 			love.graphics.translate(0, element.size.y)
 		end
@@ -122,14 +121,27 @@ local function drawElementsAbsolute(frame, elements)
 		element.position = element.position or Vector.new(0, 0)
 		love.graphics.translate(element.position.x, element.position.y)
 		element:draw()
+		if element.region then
+			regions[#regions + 1] = element.region
+		end
 		love.graphics.pop()
 	end
+end
+
+function gui.resetRegisters()
+	regions = {}
 end
 
 function frame:draw()
 	love.graphics.push()
 	love.graphics.translate(-editor.camera.x, -editor.camera.y)
 	love.graphics.translate(self.position.x - self.scale.x / 2, self.position.y - self.scale.y / 2)
+
+	local x, y = love.graphics.transformPoint(0, 0)
+	self.region.position = Vector.new(x, y)
+	if self.region then
+		regions[#regions + 1] = self.region
+	end
 
 	local content_offset = DEFAULT_FRAME_CONTENTS_OFFSET
 	local content_to_title_offset = Vector.new(0, 0)
@@ -163,7 +175,8 @@ function frame:draw()
 end
 
 function gui:newFrame(position, scale)
-	local newFrame = { position = position, scale = scale, elements = {} }
+	local newFrame =
+		{ position = position, scale = scale, elements = {}, region = gui.registerRegion("blocker", position, scale) }
 	return setmetatable(newFrame, frame)
 end
 
@@ -182,17 +195,22 @@ function gui:drawLabel(text, position, background_color)
 end
 
 function gui:drawRegisters_Debug()
-	for index, value in ipairs(regions) do
+	local detected_region = false
+	for i = #regions, 1, -1 do
+		local value = regions[i]
 		love.graphics.setColor(1, 0.3, 0.3, 0.4)
 		love.graphics.push()
-		local x, y = love.mouse.getPosition()
-		if
-			x > value.position.x
-			and x < value.position.x + value.size.x
-			and y > value.position.y
-			and y < value.position.y + value.size.y
-		then
-			love.graphics.setColor(0.3, 1, 0.3, 0.4)
+		if detected_region == false then
+			local x, y = love.mouse.getPosition()
+			if
+				x > value.position.x
+				and x < value.position.x + value.size.x
+				and y > value.position.y
+				and y < value.position.y + value.size.y
+			then
+				love.graphics.setColor(0.3, 1, 0.3, 0.4)
+				detected_region = true
+			end
 		end
 		love.graphics.translate(-editor.camera.x, -editor.camera.y)
 		love.graphics.translate(value.position.x, value.position.y)

@@ -3,7 +3,7 @@ local intState = {}
 local grid_data = {}
 local current_int = 3
 
-local COLOR_OF_VALUE = {
+local COLOR_OF_INT = {
 	{ 1, 1, 1, 0.3 },
 	{ 0.2, 0.8, 0.2, 0.3 },
 	{ 0.8, 0.2, 0.2, 0.3 },
@@ -52,6 +52,9 @@ frame2.position.x = frame2.position.x + 150
 local grid = editor.utility.grid.newGrid(40)
 
 function intState:update(dt)
+	if editor.utility.gui.isOverUi() then
+		return
+	end
 	if love.mouse.isDown(1) then
 		local grid_x, grid_y = grid:mouseToGrid()
 
@@ -68,11 +71,12 @@ end
 
 function intState:draw()
 	local x, y = grid:mouseToGrid()
+	if editor.utility.gui.isOverUi() == false then
+		love.graphics.rectangle("fill", x * grid.cell_size, y * grid.cell_size, grid.cell_size, grid.cell_size)
+	end
 
-	love.graphics.rectangle("fill", x * grid.cell_size, y * grid.cell_size, grid.cell_size, grid.cell_size)
-
-	if COLOR_OF_VALUE[current_int] then
-		love.graphics.setColor(COLOR_OF_VALUE[current_int])
+	if COLOR_OF_INT[current_int] then
+		love.graphics.setColor(COLOR_OF_INT[current_int])
 	else
 		love.graphics.setColor(1, 1, 1, 0.3)
 	end
@@ -82,8 +86,8 @@ function intState:draw()
 	love.graphics.setColor(1, 1, 1, 0.3)
 	for _x, collumn in pairs(grid_data) do
 		for _y, item in pairs(collumn) do
-			if COLOR_OF_VALUE[item] then
-				love.graphics.setColor(COLOR_OF_VALUE[item])
+			if COLOR_OF_INT[item] then
+				love.graphics.setColor(COLOR_OF_INT[item])
 			else
 				love.graphics.setColor(1, 1, 1, 0.3)
 			end
@@ -98,7 +102,7 @@ function intState:draw()
 	love.graphics.translate(0, -50)
 	editor.utility.gui:drawLabel(current_int, Vector.new(0, love.graphics.getHeight()))
 	love.graphics.pop()
-	editor.utility.gui:drawRegisters_Debug()
+
 	frame:draw()
 	frame2:draw()
 end
