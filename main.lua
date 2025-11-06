@@ -21,6 +21,10 @@ function love.keypressed(key)
 	end
 end
 
+function love.mousepressed(x, y, button)
+	Input:sendMouseInput(button, "click")
+end
+
 function love.wheelmoved(x, y)
 	Input:sendScrolled(x, y)
 end

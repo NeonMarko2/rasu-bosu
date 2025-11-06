@@ -20,6 +20,8 @@ input.action_began = Signal.new()
 input.action_ended = Signal.new()
 input.input_began = Signal.new()
 input.input_ended = Signal.new()
+input.click_began = Signal.new()
+input.click_ended = Signal.new()
 input.scrolled = Signal.new()
 
 ---@param key string
@@ -33,6 +35,16 @@ function input:sendInput(key, input_state)
 	elseif input_state == "ended" then
 		input.state[key] = nil
 		input.input_ended(key)
+	end
+end
+
+---@param value number | Vector
+---@param input_type
+---| "click"
+---| "move"
+function input:sendMouseInput(value, input_type)
+	if input_type == "click" then
+		input.click_began(value)
 	end
 end
 
