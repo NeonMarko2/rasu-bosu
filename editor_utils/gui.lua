@@ -15,6 +15,11 @@ end
 
 local FRAME_HEADER_FONT = love.graphics.newFont(20, "mono", 5)
 
+---@enum GUI_LAYOUTS
+local GUI_LAYOUTS = {
+	VERTICAL = 1,
+}
+
 local function setHeaderStencil(frame)
 	local font_length = FRAME_HEADER_FONT:getWidth(frame.title)
 	love.graphics.stencil(function()
@@ -40,11 +45,19 @@ local function drawHeader(frame)
 	)
 end
 
-local function drawElement(element)
+local function drawElement(element, frame)
 	if element.type == TYPE_LABEL then
 		love.graphics.setColor(1, 1, 1, 1)
-		love.graphics.print(element.text)
-		love.graphics.translate(0, love.graphics.getFont():getHeight())
+
+		if frame.layout == GUI_LAYOUTS.VERTICAL then
+			love.graphics.print(element.text, 0, 0)
+			love.graphics.translate(0, love.graphics.getFont():getHeight())
+		else
+			element.position = element.position or {}
+			element.position.x = element.position.x or 0
+			element.position.y = element.position.y or 0
+			love.graphics.print(element.text, element.position.x, element.position.y)
+		end
 	end
 end
 
@@ -64,7 +77,7 @@ function frame:draw()
 	love.graphics.translate(5, 2)
 
 	for index, value in ipairs(self.elements) do
-		drawElement(value)
+		drawElement(value, self)
 	end
 
 	if frame.title then
