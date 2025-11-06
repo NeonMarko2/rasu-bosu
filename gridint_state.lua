@@ -36,6 +36,7 @@ local function createFrame()
 	frame:addLabel("Frame this is")
 	frame:addLabel("This is a frame", Vector.new(50, 25))
 	frame:addLabel("This is a frame", Vector.new(-15, 66))
+	frame:addCheckBox()
 	return frame
 end
 
@@ -97,6 +98,7 @@ function intState:draw()
 	love.graphics.translate(0, -50)
 	editor.utility.gui:drawLabel(current_int, Vector.new(0, love.graphics.getHeight()))
 	love.graphics.pop()
+	editor.utility.gui:drawRegisters_Debug()
 	frame:draw()
 	frame2:draw()
 end
