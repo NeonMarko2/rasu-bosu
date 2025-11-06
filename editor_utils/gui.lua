@@ -3,6 +3,7 @@ local gui = {}
 ---@class Frame
 ---@field position Vector
 ---@field scale Vector
+---@field elements table
 local frame = { color = { 0, 0, 0, 0.25 }, outline = { 1, 1, 1, 1 }, elements = {} }
 ---@private
 frame.__index = frame
@@ -19,6 +20,9 @@ local FRAME_HEADER_FONT = love.graphics.newFont(20, "mono", 5)
 local GUI_LAYOUTS = {
 	VERTICAL = 1,
 }
+
+local DEFAULT_FRAME_CONTENTS_OFFSET = Vector.new(5, 2)
+local FRAME_CONTENTS_TO_TITLE_OFFSET = Vector.new(0, 13)
 
 local function setHeaderStencil(frame)
 	local font_length = FRAME_HEADER_FONT:getWidth(frame.title)
@@ -65,8 +69,12 @@ function frame:draw()
 	love.graphics.translate(-editor.camera.x, -editor.camera.y)
 	love.graphics.translate(self.position.x - self.scale.x / 2, self.position.y - self.scale.y / 2)
 
+	local content_offset = DEFAULT_FRAME_CONTENTS_OFFSET
+	local content_to_title_offset = Vector.new(0, 0)
+
 	if frame.title then
 		setHeaderStencil(self)
+		content_to_title_offset = FRAME_CONTENTS_TO_TITLE_OFFSET
 	end
 
 	love.graphics.setColor(self.color)
@@ -74,11 +82,15 @@ function frame:draw()
 	love.graphics.setColor(self.outline)
 	love.graphics.rectangle("line", 0, 0, self.scale.x, self.scale.y, 5, 5)
 
-	love.graphics.translate(5, 2)
+	love.graphics.push()
+	love.graphics.translate(content_offset.x, content_offset.y)
+	love.graphics.translate(content_to_title_offset.x, content_to_title_offset.y)
 
 	for index, value in ipairs(self.elements) do
 		drawElement(value, self)
 	end
+
+	love.graphics.pop()
 
 	if frame.title then
 		drawHeader(self)

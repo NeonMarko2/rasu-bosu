@@ -36,7 +36,6 @@ local frame = editor.utility.gui:newFrame(
 frame["layout"] = 1
 frame:addLabel("Frame this is")
 frame:addLabel("This is a frame", Vector.new(50, 25))
-frame:addLabel("This is a frame")
 
 local grid = editor.utility.grid.newGrid(40)
 
