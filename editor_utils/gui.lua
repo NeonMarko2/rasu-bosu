@@ -8,10 +8,10 @@ local frame = { color = { 0, 0, 0, 0.25 }, outline = { 1, 1, 1, 1 }, elements = 
 ---@private
 frame.__index = frame
 
-local TYPE_LABEL = 1
+local label = require("editor_utils.gui.label")
 
 function frame:addLabel(text, position)
-	self.elements[#self.elements + 1] = { type = TYPE_LABEL, position = position, text = text }
+	self.elements[#self.elements + 1] = label.new(text, position)
 end
 
 local FRAME_HEADER_FONT = love.graphics.newFont(20, "mono", 5)
@@ -49,19 +49,22 @@ local function drawHeader(frame)
 	)
 end
 
-local function drawElement(element, frame)
-	if element.type == TYPE_LABEL then
-		love.graphics.setColor(1, 1, 1, 1)
-
+local function drawElementsVertically(frame, elements)
+	for index, element in ipairs(elements) do
+		element:draw()
 		if frame.layout == GUI_LAYOUTS.VERTICAL then
-			love.graphics.print(element.text, 0, 0)
-			love.graphics.translate(0, love.graphics.getFont():getHeight())
-		else
-			element.position = element.position or {}
-			element.position.x = element.position.x or 0
-			element.position.y = element.position.y or 0
-			love.graphics.print(element.text, element.position.x, element.position.y)
+			love.graphics.translate(0, element.size.y)
 		end
+	end
+end
+
+local function drawElementsAbsolute(frame, elements)
+	for index, element in ipairs(elements) do
+		love.graphics.push()
+		element.position = element.position or Vector.new(0, 0)
+		love.graphics.translate(element.position.x, element.position.y)
+		element:draw()
+		love.graphics.pop()
 	end
 end
 
@@ -86,8 +89,10 @@ function frame:draw()
 	love.graphics.translate(content_offset.x, content_offset.y)
 	love.graphics.translate(content_to_title_offset.x, content_to_title_offset.y)
 
-	for index, value in ipairs(self.elements) do
-		drawElement(value, self)
+	if self.layout == GUI_LAYOUTS.VERTICAL then
+		drawElementsVertically(self, self.elements)
+	else
+		drawElementsAbsolute(self, self.elements)
 	end
 
 	love.graphics.pop()
