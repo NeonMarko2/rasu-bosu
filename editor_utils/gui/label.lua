@@ -7,8 +7,8 @@ function label:setText(text)
 	self.size = Vector.new(font:getWidth(text), font:getHeight())
 end
 
-function label.new(text, position)
-	local newLabel = { type = 1, text = "", position = position }
+function label.new(parent, text, position)
+	local newLabel = { type = 1, text = "", position = position, parent = parent }
 	setmetatable(newLabel, label)
 	newLabel:setText(text)
 	return newLabel
