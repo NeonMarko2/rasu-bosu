@@ -1,4 +1,4 @@
-local frame = { color = { 0, 0, 0, 0.25 }, outline = { 1, 1, 1, 1 } }
+local frame = { color = { 0, 0, 0, 0.25 }, outline = { 1, 1, 1, 1 }, anchor = Vector.new(0, 0) }
 frame.gui = nil
 frame.__index = frame
 
@@ -85,7 +85,10 @@ end
 function frame:draw()
 	love.graphics.push()
 	love.graphics.translate(-editor.camera.x, -editor.camera.y)
-	love.graphics.translate(self.position.x - self.scale.x / 2, self.position.y - self.scale.y / 2)
+	love.graphics.translate(
+		self.position.x - (self.scale.x * self.anchor.x),
+		self.position.y - (self.scale.y * self.anchor.y)
+	)
 
 	local x, y = love.graphics.transformPoint(0, 0)
 	self.region.position = Vector.new(x, y)
