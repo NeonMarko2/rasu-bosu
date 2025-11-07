@@ -15,6 +15,20 @@ local editing_state = require("gridint_state")
 
 editor.config = require("editor_config")
 
+local state_name_label = editor.utility.gui:newFrame(Vector.new(0, 0), Vector.new(0, 0))
+state_name_label.fit_content = true
+state_name_label:addLabel("State", Vector.new(0, 0))
+
+state_name_label.anchor = Vector.new(0, 1)
+-- state_name_label.outline = { 0, 0, 0, 0 }
+
+function editor.utility.drawStateNameLabel()
+	love.graphics.translate(10, love.graphics.getHeight() - 15)
+	state_name_label:draw()
+end
+
+editor.utility.state_name_label = state_name_label
+
 Input.input_began.sub(function(key)
 	if key == "o" then
 		editor.export_requested()

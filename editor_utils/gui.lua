@@ -90,18 +90,6 @@ Input.click_began.sub(function()
 	end
 end)
 
-function gui:drawLabel(text, position, background_color)
-	local background_color = background_color or { 0, 0, 0, 0.25 }
-	love.graphics.push()
-	love.graphics.translate(position.x, position.y)
-	love.graphics.translate(-editor.camera.x, -editor.camera.y)
-	love.graphics.setColor(background_color)
-	love.graphics.rectangle("fill", 0, 0, STATE_IDENTIFIER_FONT:getWidth(text) + 25, 50)
-	love.graphics.setColor(1, 1, 1, 1)
-	love.graphics.printf(text, STATE_IDENTIFIER_FONT, 10, 0, 999, "left")
-	love.graphics.pop()
-end
-
 function gui:drawRegisters_Debug()
 	local detected_region = false
 	for i = #regions, 1, -1 do
