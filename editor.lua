@@ -55,7 +55,7 @@ function editor:draw()
 		editing_state:draw()
 	end
 
-	editor.utility.gui:drawRegisters_Debug()
+	-- editor.utility.gui:drawRegisters_Debug()
 	love.graphics.pop()
 end
 

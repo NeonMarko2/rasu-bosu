@@ -25,7 +25,14 @@ end
 ---@param size Vector
 ---@return table
 function gui.registerRegion(type, position, size)
-	local region = { type = type, position = position, size = size, activated = Signal.new() }
+	local region = {
+		type = type,
+		position = position,
+		size = size,
+		activated = Signal.new(),
+		began_hover_over = Signal.new(),
+		ended_hover_over = Signal.new(),
+	}
 	return region
 end
 
@@ -54,13 +61,26 @@ function gui.isOverUi()
 	return hovering_over ~= nil
 end
 
+function gui.getCurrentlyHoveringOver()
+	return hovering_over
+end
+
 function gui:updateRegions()
 	for i = #regions, 1, -1 do
 		if isMouseOverRegion(regions[i]) then
+			if hovering_over ~= regions[i] then
+				regions[i].began_hover_over()
+			end
+
 			hovering_over = regions[i]
 			return
 		end
 	end
+
+	if hovering_over then
+		hovering_over.ended_hover_over()
+	end
+
 	hovering_over = nil
 end
 

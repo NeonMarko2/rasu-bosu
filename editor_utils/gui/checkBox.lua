@@ -26,7 +26,12 @@ function checkBox:draw()
 	local x, y = love.graphics.transformPoint(0, 0)
 	self.region.position = Vector.new(x, y)
 	love.graphics.rectangle("line", 0, 0, 30, 30, 3, 3)
+	if checkBox.gui.getCurrentlyHoveringOver() == self.region then
+		love.graphics.setColor(1, 1, 1, 0.5)
+		love.graphics.rectangle("fill", 0, 0, 30, 30)
+	end
 	if self.value == true then
+		love.graphics.setColor(1, 1, 1, 1)
 		love.graphics.rectangle("fill", 5, 5, 20, 20, 3, 3)
 	end
 end
