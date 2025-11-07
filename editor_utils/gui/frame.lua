@@ -23,11 +23,13 @@ function frame:newFrame(position, scale)
 end
 
 function frame:addLabel(text, position)
-	self.elements[#self.elements + 1] = frame.gui.label.new(text, position)
+	self.elements[#self.elements + 1] = frame.gui.label.new(self, text, position)
+	return self.elements[#self.elements]
 end
 
 function frame:addCheckBox(position)
 	self.elements[#self.elements + 1] = frame.gui.checkBox.new()
+	return self.elements[#self.elements]
 end
 
 function frame:addElement(element)
@@ -102,6 +104,21 @@ function frame:draw()
 	if self.title then
 		setHeaderStencil(self)
 		content_to_title_offset = FRAME_CONTENTS_TO_TITLE_OFFSET
+	end
+
+	if self.fit_content then
+		local width, height = 0, 0
+		for index, element in ipairs(self.elements) do
+			if element.size and element.size.y then
+				height = height + element.size.y
+			end
+			if element.size and element.size.x and element.size.x > width then
+				width = element.size.x
+			end
+		end
+		width = width + content_offset.x * 2
+		height = height + content_offset.y * 2
+		self.scale = Vector.new(width, height)
 	end
 
 	love.graphics.setColor(self.color)
