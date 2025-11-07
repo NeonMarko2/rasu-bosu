@@ -13,6 +13,8 @@ editor.utility.gui = require("editor_utils.gui")
 
 local editing_state = require("gridint_state")
 
+editor.config = require("editor_config")
+
 Input.input_began.sub(function(key)
 	if key == "o" then
 		editor.export_requested()
@@ -55,7 +57,9 @@ function editor:draw()
 		editing_state:draw()
 	end
 
-	-- editor.utility.gui:drawRegisters_Debug()
+	if editor.config.draw_registers then
+		editor.utility.gui:drawRegisters_Debug()
+	end
 	love.graphics.pop()
 end
 
