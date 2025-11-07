@@ -1,18 +1,31 @@
 local gui = {}
 
----@class Frame
----@field position Vector
----@field scale Vector
----@field elements? table
-local frame = { color = { 0, 0, 0, 0.25 }, outline = { 1, 1, 1, 1 }, elements = {} }
----@private
-frame.__index = frame
+---@enum GUI_LAYOUTS
+local GUI_LAYOUTS = {
+	VERTICAL = 1,
+}
+
+local DEFAULT_FRAME_CONTENTS_OFFSET = Vector.new(5, 2)
+local FRAME_CONTENTS_TO_TITLE_OFFSET = Vector.new(0, 13)
+
+local FRAME_HEADER_FONT = love.graphics.newFont(20, "mono", 5)
 
 local regions = {}
+
+local hovering_over = nil
 
 local label = require("editor_utils.gui.label")
 local checkBox = require("editor_utils.gui.checkBox")
 checkBox.gui = gui
+
+local frame = { color = { 0, 0, 0, 0.25 }, outline = { 1, 1, 1, 1 }, elements = {} }
+frame.__index = frame
+
+function gui:newFrame(position, scale)
+	local newFrame =
+		{ position = position, scale = scale, elements = {}, region = gui.registerRegion("blocker", position, scale) }
+	return setmetatable(newFrame, frame)
+end
 
 function frame:addLabel(text, position)
 	self.elements[#self.elements + 1] = label.new(text, position)
@@ -21,16 +34,6 @@ end
 function frame:addCheckBox(position)
 	self.elements[#self.elements + 1] = checkBox.new()
 end
-
-local FRAME_HEADER_FONT = love.graphics.newFont(20, "mono", 5)
-
----@enum GUI_LAYOUTS
-local GUI_LAYOUTS = {
-	VERTICAL = 1,
-}
-
-local DEFAULT_FRAME_CONTENTS_OFFSET = Vector.new(5, 2)
-local FRAME_CONTENTS_TO_TITLE_OFFSET = Vector.new(0, 13)
 
 local function setHeaderStencil(frame)
 	local font_length = FRAME_HEADER_FONT:getWidth(frame.title)
@@ -57,6 +60,10 @@ function gui.registerRegion(type, position, size)
 	return region
 end
 
+function gui.resetRegisters()
+	regions = {}
+end
+
 local function isMouseOverRegion(region)
 	local x, y = love.mouse.getPosition()
 	if
@@ -69,8 +76,6 @@ local function isMouseOverRegion(region)
 	end
 	return false
 end
-
-local hovering_over = nil
 
 function gui.isOverUi()
 	return hovering_over ~= nil
@@ -128,10 +133,6 @@ local function drawElementsAbsolute(frame, elements)
 	end
 end
 
-function gui.resetRegisters()
-	regions = {}
-end
-
 function frame:draw()
 	love.graphics.push()
 	love.graphics.translate(-editor.camera.x, -editor.camera.y)
@@ -172,12 +173,6 @@ function frame:draw()
 		drawHeader(self)
 	end
 	love.graphics.pop()
-end
-
-function gui:newFrame(position, scale)
-	local newFrame =
-		{ position = position, scale = scale, elements = {}, region = gui.registerRegion("blocker", position, scale) }
-	return setmetatable(newFrame, frame)
 end
 
 local STATE_IDENTIFIER_FONT = love.graphics.newFont(30, "mono", 5)
