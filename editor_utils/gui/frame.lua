@@ -12,13 +12,23 @@ local GUI_LAYOUTS = {
 	VERTICAL = 1,
 }
 
-function frame:newFrame(position, scale)
+function frame:newFrame(position, scale, properties, elements)
 	local newFrame = {
 		position = position,
 		scale = scale,
 		elements = {},
 		region = frame.gui.registerRegion("blocker", position, scale),
 	}
+	if properties then
+		for key, property in pairs(properties) do
+			newFrame[key] = property
+		end
+	end
+	if elements then
+		for _, element in ipairs(elements) do
+			newFrame.elements[#newFrame.elements + 1] = element
+		end
+	end
 	return setmetatable(newFrame, frame)
 end
 

@@ -15,8 +15,7 @@ local editing_state = require("gridint_state")
 
 editor.config = require("editor_config")
 
-local state_name_label = editor.utility.gui:newFrame(Vector.new(0, 0), Vector.new(0, 0))
-state_name_label.fit_content = true
+local state_name_label = editor.utility.gui:newFrame(Vector.new(0, 0), Vector.new(0, 0), { fit_content = true })
 state_name_label:addLabel("State", Vector.new(0, 0))
 
 state_name_label.anchor = Vector.new(0, 1)

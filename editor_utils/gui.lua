@@ -14,8 +14,8 @@ frame.gui = gui
 
 local STATE_IDENTIFIER_FONT = love.graphics.newFont(30, "mono", 5)
 
-function gui:newFrame(position, scale)
-	return frame:newFrame(position, scale)
+function gui:newFrame(position, scale, properties, elements)
+	return frame:newFrame(position, scale, properties, elements)
 end
 
 ---@param type string
