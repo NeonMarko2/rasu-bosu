@@ -1,9 +1,5 @@
 local gui = {}
 
-local regions = {}
-
-local hovering_over = nil
-
 gui.label = require("editor_utils.gui.label")
 gui.checkBox = require("editor_utils.gui.checkBox")
 gui.frame = require("editor_utils.gui.frame")
@@ -12,19 +8,36 @@ local frame = gui.frame
 checkBox.gui = gui
 frame.gui = gui
 
+---@class Region Regions are used for detecting mouse events at specified areas
+---@field type string Determines whether the region will detect mouse events, or block them. Used on frames to prevent mouse inputs from going through them.
+---| "clickable"
+---| "blocker"
+---@field position Vector
+---@field size Vector
+---@field activated Signal When the mouse clicks while on top of the region
+---@field began_hover_over Signal
+---@field ended_hover_over Signal
+
+---@type Region[]
+local regions = {}
+
+---@type Region?
+local hovering_over = nil
+
 local STATE_IDENTIFIER_FONT = love.graphics.newFont(30, "mono", 5)
 
 function gui:newFrame(position, scale, properties, elements)
 	return frame:newFrame(position, scale, properties, elements)
 end
 
+---Creates a regions used for detecting mouse events within its specifies area
 ---@param type string
 ---| "clickable"
 ---| "blocker"
 ---@param position Vector
 ---@param size Vector
----@return table
-function gui.registerRegion(type, position, size)
+---@return Region
+function gui.createRegion(type, position, size)
 	local region = {
 		type = type,
 		position = position,
@@ -36,14 +49,21 @@ function gui.registerRegion(type, position, size)
 	return region
 end
 
+---Allows the region/register to detect its mouse events next frame.
+---
+---Adds the given region to a table, which exists until the next register reset (which is usually just one frame).
+---@param region Region
+function gui.registerRegion(region)
+	regions[#regions + 1] = region
+end
+
+---Resets the registered regions.
 function gui.resetRegisters()
 	regions = {}
 end
 
-function gui.addRegion(region)
-	regions[#regions + 1] = region
-end
-
+---@param region Region
+---@return boolean
 local function isMouseOverRegion(region)
 	local x, y = love.mouse.getPosition()
 	if
@@ -57,10 +77,14 @@ local function isMouseOverRegion(region)
 	return false
 end
 
+---Returns whether the mouse is pointing over any UI elements (region/register).
+---@return boolean
 function gui.isOverUi()
 	return hovering_over ~= nil
 end
 
+---If the mouse is pointing over any region, it will return that region. Otherwise it will return nil. If there are multiple regions overlapping it will return the top most one.
+---@return Region?
 function gui.getCurrentlyHoveringOver()
 	return hovering_over
 end

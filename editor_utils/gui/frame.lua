@@ -17,7 +17,7 @@ function frame:newFrame(position, scale, properties, elements)
 		position = position,
 		scale = scale,
 		elements = {},
-		region = frame.gui.registerRegion("blocker", position, scale),
+		region = frame.gui.createRegion("blocker", position, scale),
 	}
 	if properties then
 		for key, property in pairs(properties) do
@@ -75,7 +75,7 @@ local function drawElementsVertically(elements)
 	for _, element in ipairs(elements) do
 		element:draw()
 		if element.region then
-			frame.gui.addRegion(element.region)
+			frame.gui.registerRegion(element.region)
 		end
 		love.graphics.translate(0, element.size.y)
 	end
@@ -88,7 +88,7 @@ local function drawElementsAbsolute(elements)
 		love.graphics.translate(element.position.x, element.position.y)
 		element:draw()
 		if element.region then
-			frame.gui.addRegion(element.region)
+			frame.gui.registerRegion(element.region)
 		end
 		love.graphics.pop()
 	end
@@ -105,7 +105,7 @@ function frame:draw()
 	local x, y = love.graphics.transformPoint(0, 0)
 	self.region.position = Vector.new(x, y)
 	if self.region then
-		frame.gui.addRegion(self.region)
+		frame.gui.registerRegion(self.region)
 	end
 
 	local content_offset = DEFAULT_FRAME_CONTENTS_OFFSET
