@@ -109,7 +109,7 @@ function intState:draw()
 
 	editor.utility.state_name_label.elements[1]:setText("Integer Grid")
 	editor.utility.drawStateNameLabel()
-	love.graphics.translate(0, -current_int_label.parent.scale.y)
+	love.graphics.translate(0, -current_int_label.parent.size.y)
 	current_int_label:setText(current_int)
 	current_int_label.parent:draw()
 end

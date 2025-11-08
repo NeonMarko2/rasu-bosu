@@ -12,13 +12,23 @@ local GUI_LAYOUTS = {
 	VERTICAL = 1,
 }
 
-function frame:newFrame(position, scale, properties, elements)
-	local newFrame = {
-		position = position,
-		scale = scale,
-		elements = {},
-		region = frame.gui.createRegion("blocker", position, scale),
-	}
+---@class Frame : Element A base container for all drawing elements
+---@field elements any
+---@field region Region
+---@field color table
+---@field outline table
+---@field anchor Vector Marks where the top left of the ui is. 0,  0 is top left. 0.5,  0.5 is center. 1,  1 is bottom right
+---@field layout GUI_LAYOUTS How the elements should be positioned
+
+---@param position Vector
+---@param size Vector
+---@param properties table Any properties to immediately create
+---@param elements table Any elements to immediately create inside of the frame
+---@return Frame
+function frame:newFrame(position, size, properties, elements)
+	local newFrame = frame.gui.element.new(position, size)
+	newFrame.elements = {}
+	newFrame.region = frame.gui.createRegion("blocker", position, size)
 	if properties then
 		for key, property in pairs(properties) do
 			newFrame[key] = property
@@ -32,16 +42,22 @@ function frame:newFrame(position, scale, properties, elements)
 	return setmetatable(newFrame, frame)
 end
 
+---@param text string
+---@param position Vector
+---@return table CHANGE TO RETURN LABEL ONCE LABEL IS A CLASS
 function frame:addLabel(text, position)
 	self.elements[#self.elements + 1] = frame.gui.label.new(self, text, position)
 	return self.elements[#self.elements]
 end
 
+---@param position Vector
+---@return table SAME HERE
 function frame:addCheckBox(position)
 	self.elements[#self.elements + 1] = frame.gui.checkBox.new()
 	return self.elements[#self.elements]
 end
 
+---@deprecated
 function frame:addElement(element)
 	self.elements[#self.elements + 1] = element
 end
@@ -51,7 +67,7 @@ local function setHeaderStencil(frame)
 	love.graphics.stencil(function()
 		love.graphics.rectangle(
 			"fill",
-			frame.scale.x / 2 - font_length / 2 - 5,
+			frame.size.x / 2 - font_length / 2 - 5,
 			FRAME_HEADER_FONT:getHeight() / 2,
 			font_length + 10,
 			-FRAME_HEADER_FONT:getHeight()
@@ -67,7 +83,7 @@ local function drawHeader(frame)
 	love.graphics.print(
 		frame.title,
 		FRAME_HEADER_FONT,
-		love.math.newTransform(frame.scale.x / 2 - font_length / 2, -FRAME_HEADER_FONT:getHeight() / 2)
+		love.math.newTransform(frame.size.x / 2 - font_length / 2, -FRAME_HEADER_FONT:getHeight() / 2)
 	)
 end
 
@@ -98,8 +114,8 @@ function frame:draw()
 	love.graphics.push()
 	love.graphics.translate(-editor.camera.x, -editor.camera.y)
 	love.graphics.translate(
-		self.position.x - (self.scale.x * self.anchor.x),
-		self.position.y - (self.scale.y * self.anchor.y)
+		self.position.x - (self.size.x * self.anchor.x),
+		self.position.y - (self.size.y * self.anchor.y)
 	)
 
 	local x, y = love.graphics.transformPoint(0, 0)
@@ -128,13 +144,13 @@ function frame:draw()
 		end
 		width = width + content_offset.x * 2
 		height = height + content_offset.y * 2
-		self.scale = Vector.new(width, height)
+		self.size = Vector.new(width, height)
 	end
 
 	love.graphics.setColor(self.color)
-	love.graphics.rectangle("fill", 0, 0, self.scale.x, self.scale.y, 5, 5)
+	love.graphics.rectangle("fill", 0, 0, self.size.x, self.size.y, 5, 5)
 	love.graphics.setColor(self.outline)
-	love.graphics.rectangle("line", 0, 0, self.scale.x, self.scale.y, 5, 5)
+	love.graphics.rectangle("line", 0, 0, self.size.x, self.size.y, 5, 5)
 
 	love.graphics.push()
 	love.graphics.translate(content_offset.x, content_offset.y)
