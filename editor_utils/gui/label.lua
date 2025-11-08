@@ -1,4 +1,4 @@
-local label = {}
+label = {}
 label.__index = label
 
 function label:setText(text)

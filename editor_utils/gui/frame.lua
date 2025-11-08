@@ -1,5 +1,4 @@
-local frame = { color = { 0, 0, 0, 0.25 }, outline = { 1, 1, 1, 1 }, anchor = Vector.new(0, 0) }
-frame.gui = nil
+frame = { color = { 0, 0, 0, 0.25 }, outline = { 1, 1, 1, 1 }, anchor = Vector.new(0, 0) }
 frame.__index = frame
 
 local DEFAULT_FRAME_CONTENTS_OFFSET = Vector.new(5, 2)
@@ -26,9 +25,9 @@ local GUI_LAYOUTS = {
 ---@param elements table Any elements to immediately create inside of the frame
 ---@return Frame
 function frame:newFrame(position, size, properties, elements)
-	local newFrame = frame.gui.element.new(position, size)
+	local newFrame = element.new(position, size)
 	newFrame.elements = {}
-	newFrame.region = frame.gui.createRegion("blocker", position, size)
+	newFrame.region = gui.createRegion("blocker", position, size)
 	if properties then
 		for key, property in pairs(properties) do
 			newFrame[key] = property
@@ -46,14 +45,14 @@ end
 ---@param position Vector
 ---@return table CHANGE TO RETURN LABEL ONCE LABEL IS A CLASS
 function frame:addLabel(text, position)
-	self.elements[#self.elements + 1] = frame.gui.label.new(self, text, position)
+	self.elements[#self.elements + 1] = label.new(self, text, position)
 	return self.elements[#self.elements]
 end
 
 ---@param position Vector
 ---@return table SAME HERE
 function frame:addCheckBox(position)
-	self.elements[#self.elements + 1] = frame.gui.checkBox.new()
+	self.elements[#self.elements + 1] = checkBox.new()
 	return self.elements[#self.elements]
 end
 
@@ -91,7 +90,7 @@ local function drawElementsVertically(elements)
 	for _, element in ipairs(elements) do
 		element:draw()
 		if element.region then
-			frame.gui.registerRegion(element.region)
+			gui.registerRegion(element.region)
 		end
 		love.graphics.translate(0, element.size.y)
 	end
@@ -104,7 +103,7 @@ local function drawElementsAbsolute(elements)
 		love.graphics.translate(element.position.x, element.position.y)
 		element:draw()
 		if element.region then
-			frame.gui.registerRegion(element.region)
+			gui.registerRegion(element.region)
 		end
 		love.graphics.pop()
 	end
@@ -121,7 +120,7 @@ function frame:draw()
 	local x, y = love.graphics.transformPoint(0, 0)
 	self.region.position = Vector.new(x, y)
 	if self.region then
-		frame.gui.registerRegion(self.region)
+		gui.registerRegion(self.region)
 	end
 
 	local content_offset = DEFAULT_FRAME_CONTENTS_OFFSET

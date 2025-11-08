@@ -1,5 +1,9 @@
 editor = {}
 
+editor_environment = {}
+
+_ENV = editor_environment
+
 editor.level_data = {}
 
 editor.camera = Vector.new(0, 0)
