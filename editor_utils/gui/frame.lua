@@ -19,8 +19,10 @@ local GUI_LAYOUTS = {
 ---@field anchor Vector Marks where the top left of the ui is. 0,  0 is top left. 0.5,  0.5 is center. 1,  1 is bottom right
 ---@field layout GUI_LAYOUTS How the elements should be positioned
 
----@param position Vector
----@param size Vector
+---=============================================================
+
+---@param position Udimen
+---@param size Udimen
 ---@param properties table Any properties to immediately create
 ---@param elements table Any elements to immediately create inside of the frame
 ---@return Frame
@@ -42,7 +44,7 @@ function frame:newFrame(position, size, properties, elements)
 end
 
 ---@param text string
----@param position Vector
+---@param position Udimen
 ---@return Label
 function frame:addLabel(text, position)
 	self.elements[#self.elements + 1] = label.new(self, text, position)
