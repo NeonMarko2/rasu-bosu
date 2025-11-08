@@ -8,13 +8,13 @@ label.__index = label
 function label:setText(text)
 	self.text = text
 	local font = love.graphics.getFont()
-	self.size = Vector.new(font:getWidth(text), font:getHeight())
+	self.real_size = Vector.new(font:getWidth(text), font:getHeight())
 end
 
 ---@param text string
 ---@param position Udimen
 function label.new(parent, text, position)
-	local newLabel = { type = 1, text = "", position = position, parent = parent }
+	local newLabel = { type = 1, text = "", position = position, parent = parent, real_position = position }
 	setmetatable(newLabel, label)
 	newLabel:setText(text)
 	return newLabel

@@ -45,17 +45,14 @@ local current_int_label =
 current_int_label.parent.fit_content = true
 current_int_label.parent.anchor = Vector.new(0, 1)
 
-local frame = createFrame()
 local frame2 = createFrame()
 
 frame2["title"] = "Title"
 frame2.layout = 1
 
-frame.anchor = Vector.new(0.5, 0.5)
 frame2.anchor = Vector.new(0.5, 0.5)
 
-frame.position.x = frame.position.x - 150
-frame2.position.x = frame2.position.x + 150
+frame2.real_position.x = frame2.real_position.x + 150
 
 local grid = editor.utility.grid.newGrid(40)
 
@@ -104,12 +101,11 @@ function intState:draw()
 		end
 	end
 
-	frame:draw()
 	frame2:draw()
 
 	editor.utility.state_name_label.elements[1]:setText("Integer Grid")
 	editor.utility.drawStateNameLabel()
-	love.graphics.translate(0, -current_int_label.parent.size.y)
+	love.graphics.translate(0, -current_int_label.parent.real_size.y)
 	current_int_label:setText(current_int)
 	current_int_label.parent:draw()
 end

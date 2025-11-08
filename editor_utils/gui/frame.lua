@@ -94,15 +94,14 @@ local function drawElementsVertically(elements)
 		if element.region then
 			gui.registerRegion(element.region)
 		end
-		love.graphics.translate(0, element.size.y)
+		love.graphics.translate(0, element.real_size.y)
 	end
 end
 
 local function drawElementsAbsolute(elements)
 	for _, element in ipairs(elements) do
 		love.graphics.push()
-		element.position = element.position or Vector.new(0, 0)
-		love.graphics.translate(element.position.x, element.position.y)
+		love.graphics.translate(element.real_position.x, element.real_position.y)
 		element:draw()
 		if element.region then
 			gui.registerRegion(element.region)
@@ -114,10 +113,11 @@ end
 function frame:draw()
 	love.graphics.push()
 	love.graphics.translate(-editor.camera.x, -editor.camera.y)
-	love.graphics.translate(
-		self.position.x - (self.size.x * self.anchor.x),
-		self.position.y - (self.size.y * self.anchor.y)
-	)
+
+	local position = self.real_position
+	local size = self.real_size
+
+	love.graphics.translate(position.x - (size.x * self.anchor.x), position.y - (size.y * self.anchor.y))
 
 	local x, y = love.graphics.transformPoint(0, 0)
 	self.region.position = Vector.new(x, y)
@@ -136,22 +136,22 @@ function frame:draw()
 	if self.fit_content then
 		local width, height = 0, 0
 		for index, element in ipairs(self.elements) do
-			if element.size and element.size.y then
-				height = height + element.size.y
+			if element.real_size and element.real_size.y then
+				height = height + element.real_size.y
 			end
-			if element.size and element.size.x and element.size.x > width then
-				width = element.size.x
+			if element.real_size and element.real_size.x and element.real_size.x > width then
+				width = element.real_size.x
 			end
 		end
 		width = width + content_offset.x * 2
 		height = height + content_offset.y * 2
-		self.size = Vector.new(width, height)
+		self.real_size = Vector.new(width, height)
 	end
 
 	love.graphics.setColor(self.color)
-	love.graphics.rectangle("fill", 0, 0, self.size.x, self.size.y, 5, 5)
+	love.graphics.rectangle("fill", 0, 0, size.x, size.y, 5, 5)
 	love.graphics.setColor(self.outline)
-	love.graphics.rectangle("line", 0, 0, self.size.x, self.size.y, 5, 5)
+	love.graphics.rectangle("line", 0, 0, size.x, size.y, 5, 5)
 
 	love.graphics.push()
 	love.graphics.translate(content_offset.x, content_offset.y)

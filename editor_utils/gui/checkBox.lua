@@ -9,7 +9,8 @@ checkBox.__index = checkBox
 
 ---@return CheckBox
 function checkBox.new()
-	local newBox = { size = Vector.new(30, 35), value = true, region = nil }
+	local newBox = element.new(Vector.new(0, 0), Vector.new(30, 35))
+	newBox.value = true
 	local region = gui.createRegion("clickable", Vector.new(3, 5), Vector.new(30, 30))
 	local on_click = function()
 		return newBox:toggle()

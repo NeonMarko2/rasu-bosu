@@ -27,7 +27,7 @@ function gui:newFrame(position, scale, properties, elements)
 	return frame:newFrame(position, scale, properties, elements)
 end
 
----Creates a regions used for detecting mouse events within its specifies area
+---Creates a region used for detecting mouse events within its specified area
 ---@param type string
 ---| "clickable"
 ---| "blocker"

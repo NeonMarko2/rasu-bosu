@@ -8,7 +8,7 @@ element = {}
 ---@param position Udimen
 ---@param size Udimen
 function element.new(position, size)
-	local _element = { position = position, size = size }
+	local _element = { position = position, size = size, real_position = position, real_size = size }
 	return _element
 end
 
