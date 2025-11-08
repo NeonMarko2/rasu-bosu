@@ -1,6 +1,13 @@
 checkBox = {}
 checkBox.__index = checkBox
 
+---@class CheckBox : Element
+---@field value boolean
+---@field region Region
+---@field toggle fun(self : CheckBox) Toggles the value
+---@field draw fun(self : CheckBox)
+
+---@return CheckBox
 function checkBox.new()
 	local newBox = { size = Vector.new(30, 35), value = true, region = nil }
 	local region = gui.createRegion("clickable", Vector.new(3, 5), Vector.new(30, 30))

@@ -43,14 +43,14 @@ end
 
 ---@param text string
 ---@param position Vector
----@return table CHANGE TO RETURN LABEL ONCE LABEL IS A CLASS
+---@return Label
 function frame:addLabel(text, position)
 	self.elements[#self.elements + 1] = label.new(self, text, position)
 	return self.elements[#self.elements]
 end
 
 ---@param position Vector
----@return table SAME HERE
+---@return CheckBox
 function frame:addCheckBox(position)
 	self.elements[#self.elements + 1] = checkBox.new()
 	return self.elements[#self.elements]

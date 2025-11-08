@@ -1,6 +1,10 @@
 label = {}
 label.__index = label
 
+---@class Label : Element
+---@field text string
+---@field setText fun(self:Label, text:string)
+
 function label:setText(text)
 	self.text = text
 	local font = love.graphics.getFont()
