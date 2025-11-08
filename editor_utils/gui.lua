@@ -1,5 +1,6 @@
 local gui = {}
 
+gui.element = require("editor_utils.gui.element")
 gui.label = require("editor_utils.gui.label")
 gui.checkBox = require("editor_utils.gui.checkBox")
 gui.frame = require("editor_utils.gui.frame")
