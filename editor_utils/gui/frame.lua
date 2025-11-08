@@ -1,5 +1,7 @@
-frame = { color = { 0, 0, 0, 0.25 }, outline = { 1, 1, 1, 1 }, anchor = Vector.new(0, 0) }
-frame.__index = frame
+frame = element:extend()
+local color = { 0, 0, 0, 0.25 }
+local outline = { 1, 1, 1, 1 }
+local anchor = Vector.new(0, 0)
 
 local DEFAULT_FRAME_CONTENTS_OFFSET = Vector.new(5, 2)
 local FRAME_CONTENTS_TO_TITLE_OFFSET = Vector.new(0, 13)
@@ -25,30 +27,34 @@ local GUI_LAYOUTS = {
 ---@param size Udimen
 ---@param properties table Any properties to immediately create
 ---@param elements table Any elements to immediately create inside of the frame
----@return Frame
-function frame:newFrame(position, size, properties, elements)
-	local newFrame = element.new(position, size)
-	newFrame.elements = {}
-	newFrame.region = gui.createRegion("blocker", position, size)
+function frame:new(position, size, properties, elements)
+	frame.super.new(self, position, size)
+	self.elements = {}
+	self.color = color
+	self.outline = outline
+	self.anchor = anchor
+	self.region = gui.createRegion("blocker", position, size)
 	if properties then
 		for key, property in pairs(properties) do
-			newFrame[key] = property
+			self[key] = property
 		end
 	end
 	if elements then
 		for _, element in ipairs(elements) do
-			newFrame.elements[#newFrame.elements + 1] = element
+			self.elements[#self.elements + 1] = element
+			element.parent = self
 		end
 	end
-	return setmetatable(newFrame, frame)
 end
 
 ---@param text string
 ---@param position Udimen
 ---@return Label
 function frame:addLabel(text, position)
-	self.elements[#self.elements + 1] = label.new(self, text, position)
-	return self.elements[#self.elements]
+	local _label = label(text, position)
+	self.elements[#self.elements + 1] = _label
+	_label.parent = self
+	return _label
 end
 
 ---@param position Vector

@@ -31,12 +31,10 @@ end)
 local function createFrame()
 	local frame = editor.utility.gui:newFrame(
 		Vector.new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2),
-		Vector.new(200, 200)
+		Vector.new(200, 200),
+		nil,
+		{ label("This is a label", Vector.new(0, 0)), checkBox() }
 	)
-	frame:addLabel("Frame this is")
-	frame:addLabel("This is a frame", Vector.new(50, 25))
-	frame:addLabel("This is a frame", Vector.new(-15, 66))
-	frame:addCheckBox()
 	return frame
 end
 

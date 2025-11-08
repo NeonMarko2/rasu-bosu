@@ -24,7 +24,7 @@ local hovering_over = nil
 local STATE_IDENTIFIER_FONT = love.graphics.newFont(30, "mono", 5)
 
 function gui:newFrame(position, scale, properties, elements)
-	return frame:newFrame(position, scale, properties, elements)
+	return frame(position, scale, properties, elements)
 end
 
 ---Creates a region used for detecting mouse events within its specified area

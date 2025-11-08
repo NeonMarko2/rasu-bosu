@@ -1,5 +1,4 @@
-label = {}
-label.__index = label
+label = element:extend()
 
 ---@class Label : Element
 ---@field text string
@@ -13,11 +12,10 @@ end
 
 ---@param text string
 ---@param position Udimen
-function label.new(parent, text, position)
-	local newLabel = { type = 1, text = "", position = position, parent = parent, real_position = position }
-	setmetatable(newLabel, label)
-	newLabel:setText(text)
-	return newLabel
+function label:new(text, position)
+	label.super.new(self, position, Vector.new(0, 0))
+	self.text = text
+	self:setText(text)
 end
 
 function label:draw()

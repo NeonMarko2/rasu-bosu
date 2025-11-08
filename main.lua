@@ -1,3 +1,4 @@
+Object = require("libs.classic")
 Vector = require("libs.vectors")
 Signal = require("libs.signal")
 Console = require("libs.console")

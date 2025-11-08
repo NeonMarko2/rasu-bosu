@@ -1,5 +1,4 @@
-checkBox = {}
-checkBox.__index = checkBox
+checkBox = element:extend()
 
 ---@class CheckBox : Element
 ---@field value boolean
@@ -7,17 +6,15 @@ checkBox.__index = checkBox
 ---@field toggle fun(self : CheckBox) Toggles the value
 ---@field draw fun(self : CheckBox)
 
----@return CheckBox
-function checkBox.new()
-	local newBox = element.new(Vector.new(0, 0), Vector.new(30, 35))
-	newBox.value = true
+function checkBox:new()
+	checkBox.super.new(self, Vector.new(0, 0), Vector.new(0, 0))
+	self.value = true
 	local region = gui.createRegion("clickable", Vector.new(3, 5), Vector.new(30, 30))
 	local on_click = function()
-		return newBox:toggle()
+		return self:toggle()
 	end
-	newBox.region = region
-	newBox.region.activated.sub(on_click)
-	return setmetatable(newBox, checkBox)
+	self.region = region
+	self.region.activated.sub(on_click)
 end
 
 function checkBox:toggle()
