@@ -1,11 +1,12 @@
+---@class CheckBox
 checkBox = element:extend()
 
 ---@class CheckBox : Element
 ---@field value boolean
 ---@field region Region
----@field toggle fun(self : CheckBox) Toggles the value
----@field draw fun(self : CheckBox)
+---@overload fun() : CheckBox
 
+---@private
 function checkBox:new()
 	checkBox.super.new(self, Vector.new(0, 0), Vector.new(0, 0))
 	self.value = true

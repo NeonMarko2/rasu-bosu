@@ -1,3 +1,4 @@
+---@class Frame
 frame = element:extend()
 local color = { 0, 0, 0, 0.25 }
 local outline = { 1, 1, 1, 1 }
@@ -20,13 +21,11 @@ local GUI_LAYOUTS = {
 ---@field outline table
 ---@field anchor Vector Marks where the top left of the ui is. 0,  0 is top left. 0.5,  0.5 is center. 1,  1 is bottom right
 ---@field layout GUI_LAYOUTS How the elements should be positioned
+---@overload fun(position:Udimen, size:Udimen, properties:table?, elements:table<Element>?): Frame
 
 ---=============================================================
 
----@param position Udimen
----@param size Udimen
----@param properties table Any properties to immediately create
----@param elements table Any elements to immediately create inside of the frame
+---@private
 function frame:new(position, size, properties, elements)
 	frame.super.new(self, position, size)
 	self.elements = {}
