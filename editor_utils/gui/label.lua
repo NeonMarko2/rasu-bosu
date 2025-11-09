@@ -10,6 +10,7 @@ function label:new(text, position)
 	self.__ignore_newindex = true
 	self.position = position
 	self.size = Udimen.new()
+	self.text = ""
 	self.__ignore_newindex = false
 	self:setText(text)
 end
@@ -26,6 +27,9 @@ function label:draw()
 end
 
 function label:setRealSize()
+	if self.__ignore_newindex then
+		return
+	end
 	parent_size = Vector.new(love.graphics.getWidth(), love.graphics.getHeight())
 	if self.parent then
 		parent_size = self.parent.real_size
@@ -36,7 +40,13 @@ function label:setRealSize()
 		parent_size.y * self.position.y_relative + self.position.y_absolute
 	)
 	local font = love.graphics.getFont()
-	self.real_size = Vector.new(font:getWidth(self.text), font:getHeight())
+
+	local new_line_count = 1
+	for words in string.gmatch(self.text, "\n") do
+		new_line_count = new_line_count + 1
+	end
+
+	self.real_size = Vector.new(font:getWidth(self.text), font:getHeight() * new_line_count)
 end
 
 ---@private
