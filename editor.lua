@@ -4,6 +4,12 @@ editor_environment = {}
 
 _ENV = editor_environment
 
+Udimen = require("editor_utils.gui.udimen")
+editor.utility = {}
+editor.utility.grid = require("editor_utils.grid")
+editor.utility.gui = require("editor_utils.gui")
+require("editor_state")
+
 editor.level_data = {}
 
 editor.camera = Vector.new(0, 0)
@@ -11,28 +17,34 @@ local camera_speed = 75
 
 editor.export_requested = Signal.new()
 
-editor.utility = {}
-editor.utility.grid = require("editor_utils.grid")
-editor.utility.gui = require("editor_utils.gui")
-Udimen = require("editor_utils.gui.udimen")
-require("editor_state")
+editor.should_draw_state_information = true
+editor.state_information_to_display = ""
+local state_information_label =
+	frame(Udimen.new(0, 1, 15, -15), Udimen.new(), { fit_content = true, anchor = Vector.new(0, 1) }):addElement(
+		label("State Information", Udimen.new())
+	)
 
-local states = {}
-states[1] = require("gridint_state")()
-
-local editing_state = require("gridint_state")
-
-editor.config = require("editor_config")
-
-local state_name_label = editor.utility.gui:newFrame(Udimen.new(), Udimen.new(), { fit_content = true })
-state_name_label:addElement(label("State", Udimen.new()))
-
+editor.should_draw_mouse_cordinates = false
 local mouse_position_label =
 	frame(Udimen.new(1, 1, -15, -15), Udimen.new(), { fit_content = true, anchor = Vector.new(1, 1) }):addElement(
 		label("Mouse Position", Udimen.new())
 	)
 
-state_name_label.anchor = Vector.new(0, 1)
+local states = {}
+states[1] = require("gridint_state")()
+states[2] = require("sprite_state")()
+
+local editing_state = states[1]
+
+Input.input_began.sub(function(key)
+	if key == "1" then
+		editing_state = states[1]
+	elseif key == "2" then
+		editing_state = states[2]
+	end
+end)
+
+editor.config = require("editor_config")
 
 function editor.utility.drawStateNameLabel()
 	love.graphics.translate(10, love.graphics.getHeight() - 15)
@@ -88,11 +100,17 @@ function editor:draw()
 		editor.utility.gui:drawRegisters_Debug()
 	end
 	love.graphics.pop()
-	local mouse_position_x, mouse_position_y = love.mouse.getPosition()
-	mouse_position_x, mouse_position_y =
-		math.floor(mouse_position_x - editor.camera.x), math.floor(mouse_position_y - editor.camera.y)
-	mouse_position_label:setText("x: " .. mouse_position_x .. ", y: " .. mouse_position_y)
-	mouse_position_label.parent:draw()
+	if editor.should_draw_state_information then
+		state_information_label:setText(editor.state_information_to_display)
+		state_information_label.parent:draw()
+	end
+	if editor.should_draw_mouse_cordinates then
+		local mouse_position_x, mouse_position_y = love.mouse.getPosition()
+		mouse_position_x, mouse_position_y =
+			math.floor(mouse_position_x - editor.camera.x), math.floor(mouse_position_y - editor.camera.y)
+		mouse_position_label:setText("x: " .. mouse_position_x .. ", y: " .. mouse_position_y)
+		mouse_position_label.parent:draw()
+	end
 	love.graphics.pop()
 end
 

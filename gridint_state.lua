@@ -82,11 +82,8 @@ function intState:draw()
 		love.graphics.rectangle("line", x * grid.cell_size, y * grid.cell_size, grid.cell_size, grid.cell_size)
 	end
 
-	editor.utility.state_name_label.elements[1]:setText("Integer Grid")
-	editor.utility.drawStateNameLabel()
+	editor.state_information_to_display = "Current int: " .. current_int .. "\n" .. "State Machine: Integer Grid"
 	love.graphics.translate(0, -current_int_label.parent.real_size.y)
-	current_int_label:setText(current_int)
-	current_int_label.parent:draw()
 end
 
 return intState
