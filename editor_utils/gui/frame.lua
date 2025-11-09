@@ -46,26 +46,16 @@ function frame:new(position, size, properties, elements)
 	end
 end
 
----@param text string
----@param position Udimen
----@return Label
-function frame:addLabel(text, position)
-	local _label = label(text, position)
-	self.elements[#self.elements + 1] = _label
-	_label.parent = self
-	return _label
-end
-
----@param position Vector
----@return CheckBox
-function frame:addCheckBox(position)
-	self.elements[#self.elements + 1] = checkBox.new()
-	return self.elements[#self.elements]
-end
-
----@deprecated
-function frame:addElement(element)
-	self.elements[#self.elements + 1] = element
+---@param ...? Element
+function frame:addElement(...)
+	for _, element in ipairs({ ... }) do
+		self.elements[#self.elements + 1] = element
+		element.parent = self
+	end
+	if #{ ... } == 1 then
+		return ...
+	end
+	return { ... }
 end
 
 local function setHeaderStencil(frame)
@@ -174,6 +164,11 @@ function frame:draw()
 		drawHeader(self)
 	end
 	love.graphics.pop()
+end
+
+---@private
+function frame.__tostring()
+	return "Frame"
 end
 
 return frame

@@ -41,4 +41,9 @@ function checkBox:draw()
 	end
 end
 
+---@private
+function checkBox.__tostring()
+	return "CheckBox"
+end
+
 return checkBox

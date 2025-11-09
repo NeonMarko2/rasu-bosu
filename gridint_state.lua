@@ -39,7 +39,7 @@ local function createFrame()
 end
 
 local current_int_label =
-	editor.utility.gui:newFrame(Vector.new(0, 0), Vector.new(0, 0)):addLabel(current_int, Vector.new(0, 0))
+	editor.utility.gui:newFrame(Vector.new(0, 0), Vector.new(0, 0)):addElement(label(current_int, Vector.new(0, 0)))
 current_int_label.parent.fit_content = true
 current_int_label.parent.anchor = Vector.new(0, 1)
 

@@ -24,4 +24,9 @@ function label:draw()
 	love.graphics.print(self.text, 0, 0)
 end
 
+---@private
+function label.__tostring()
+	return "Label"
+end
+
 return label
