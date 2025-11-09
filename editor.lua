@@ -14,13 +14,14 @@ editor.export_requested = Signal.new()
 editor.utility = {}
 editor.utility.grid = require("editor_utils.grid")
 editor.utility.gui = require("editor_utils.gui")
+Udimen = require("editor_utils.gui.udimen")
 
 local editing_state = require("gridint_state")
 
 editor.config = require("editor_config")
 
-local state_name_label = editor.utility.gui:newFrame(Vector.new(0, 0), Vector.new(0, 0), { fit_content = true })
-state_name_label:addElement(label("State", Vector.new(0, 0)))
+local state_name_label = editor.utility.gui:newFrame(Udimen.new(), Udimen.new(), { fit_content = true })
+state_name_label:addElement(label("State", Udimen.new()))
 
 state_name_label.anchor = Vector.new(0, 1)
 -- state_name_label.outline = { 0, 0, 0, 0 }

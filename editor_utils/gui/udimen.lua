@@ -9,6 +9,7 @@ udimen_meta.__index = udimen_meta
 ---@field x_absolute number
 ---@field y_absolute number
 
+---@overload fun()
 ---@return Udimen
 function udimen.new(x_relative, y_relative, x_absolute, y_absolute)
 	x_relative = x_relative or 0

@@ -7,7 +7,7 @@ label = element:extend()
 
 ---@private
 function label:new(text, position)
-	label.super.new(self, position, Vector.new(0, 0))
+	label.super.new(self, position, Udimen.new())
 	self.text = text
 	self:setText(text)
 end

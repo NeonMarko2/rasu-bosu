@@ -8,7 +8,7 @@ checkBox = element:extend()
 
 ---@private
 function checkBox:new()
-	checkBox.super.new(self, Vector.new(0, 0), Vector.new(0, 0))
+	checkBox.super.new(self, Udimen.new(), Udimen.new())
 	self.value = true
 	local region = gui.createRegion("clickable", Vector.new(3, 5), Vector.new(30, 30))
 	local on_click = function()

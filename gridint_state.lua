@@ -29,17 +29,17 @@ editor.export_requested.sub(function()
 end)
 
 local function createFrame()
-	local frame = editor.utility.gui:newFrame(
-		Vector.new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2),
-		Vector.new(200, 200),
+	local frame = frame(
+		Udimen.new(0, 0, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2),
+		Udimen.new(0, 0, 200, 200),
 		nil,
-		{ label("This is a label", Vector.new(0, 0)), checkBox() }
+		{ label("This is a label", Udimen.new()), checkBox() }
 	)
 	return frame
 end
 
 local current_int_label =
-	editor.utility.gui:newFrame(Vector.new(0, 0), Vector.new(0, 0)):addElement(label(current_int, Vector.new(0, 0)))
+	editor.utility.gui:newFrame(Udimen.new(), Udimen.new()):addElement(label(current_int, Udimen.new()))
 current_int_label.parent.fit_content = true
 current_int_label.parent.anchor = Vector.new(0, 1)
 
@@ -49,8 +49,6 @@ frame2["title"] = "Title"
 frame2.layout = 1
 
 frame2.anchor = Vector.new(0.5, 0.5)
-
-frame2.real_position.x = frame2.real_position.x + 150
 
 local grid = editor.utility.grid.newGrid(40)
 

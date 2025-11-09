@@ -32,7 +32,7 @@ function frame:new(position, size, properties, elements)
 	self.color = color
 	self.outline = outline
 	self.anchor = anchor
-	self.region = gui.createRegion("blocker", position, size)
+	self.region = gui.createRegion("blocker", self.real_position, self.real_size)
 	if properties then
 		for key, property in pairs(properties) do
 			self[key] = property
@@ -63,7 +63,7 @@ local function setHeaderStencil(frame)
 	love.graphics.stencil(function()
 		love.graphics.rectangle(
 			"fill",
-			frame.size.x / 2 - font_length / 2 - 5,
+			frame.real_size.x / 2 - font_length / 2 - 5,
 			FRAME_HEADER_FONT:getHeight() / 2,
 			font_length + 10,
 			-FRAME_HEADER_FONT:getHeight()
@@ -79,7 +79,7 @@ local function drawHeader(frame)
 	love.graphics.print(
 		frame.title,
 		FRAME_HEADER_FONT,
-		love.math.newTransform(frame.size.x / 2 - font_length / 2, -FRAME_HEADER_FONT:getHeight() / 2)
+		love.math.newTransform(frame.real_size.x / 2 - font_length / 2, -FRAME_HEADER_FONT:getHeight() / 2)
 	)
 end
 
