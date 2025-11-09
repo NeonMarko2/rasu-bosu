@@ -29,12 +29,13 @@ editor.export_requested.sub(function()
 end)
 
 local function createFrame()
-	local frame = frame(
-		Udimen.new(0, 0, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2),
-		Udimen.new(0, 0, 200, 200),
-		nil,
-		{ label("This is a label", Udimen.new()), checkBox() }
-	)
+	local frame = frame(Udimen.new(0.5, 0.5, 0, 0), Udimen.new(0, 0, 200, 200), nil, {
+		label("This is a label", Udimen.new()),
+		label("This is a label", Udimen.new()),
+		checkBox(),
+		frame(Udimen.new(0.5, 0, 0, 0), Udimen.new(1, 0, 0, 30)),
+		frame(Udimen.new(), Udimen.new(1, 0, 0, 30)),
+	})
 	return frame
 end
 

@@ -107,7 +107,9 @@ end
 
 function frame:draw()
 	love.graphics.push()
-	love.graphics.translate(-editor.camera.x, -editor.camera.y)
+	if self.parent == nil then
+		love.graphics.translate(-editor.camera.x, -editor.camera.y)
+	end
 
 	local position = self.real_position
 	local size = self.real_size

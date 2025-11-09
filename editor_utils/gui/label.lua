@@ -7,21 +7,36 @@ label = element:extend()
 
 ---@private
 function label:new(text, position)
-	label.super.new(self, position, Udimen.new())
-	self.text = text
+	self.__ignore_newindex = true
+	self.position = position
+	self.size = Udimen.new()
+	self.__ignore_newindex = false
 	self:setText(text)
 end
 
 function label:setText(text)
 	self.text = text
-	local font = love.graphics.getFont()
-	self.real_size = Vector.new(font:getWidth(text), font:getHeight())
+	self:setRealSize()
 end
 
 function label:draw()
 	love.graphics.setColor(1, 1, 1, 1)
 
 	love.graphics.print(self.text, 0, 0)
+end
+
+function label:setRealSize()
+	parent_size = Vector.new(love.graphics.getWidth(), love.graphics.getHeight())
+	if self.parent then
+		parent_size = self.parent.real_size
+	end
+
+	self.real_position = Vector.new(
+		parent_size.x * self.position.x_relative + self.position.x_absolute,
+		parent_size.y * self.position.y_relative + self.position.y_absolute
+	)
+	local font = love.graphics.getFont()
+	self.real_size = Vector.new(font:getWidth(self.text), font:getHeight())
 end
 
 ---@private
