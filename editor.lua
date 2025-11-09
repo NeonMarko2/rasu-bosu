@@ -23,8 +23,12 @@ editor.config = require("editor_config")
 local state_name_label = editor.utility.gui:newFrame(Udimen.new(), Udimen.new(), { fit_content = true })
 state_name_label:addElement(label("State", Udimen.new()))
 
+local mouse_position_label =
+	frame(Udimen.new(1, 1, -15, -15), Udimen.new(), { fit_content = true, anchor = Vector.new(1, 1) }):addElement(
+		label("Mouse Position", Udimen.new())
+	)
+
 state_name_label.anchor = Vector.new(0, 1)
--- state_name_label.outline = { 0, 0, 0, 0 }
 
 function editor.utility.drawStateNameLabel()
 	love.graphics.translate(10, love.graphics.getHeight() - 15)
@@ -69,6 +73,7 @@ end
 function editor:draw()
 	love.graphics.push()
 	love.graphics.translate(editor.camera.x, editor.camera.y)
+	love.graphics.push()
 
 	editor.utility.gui.resetRegisters()
 	if editing_state then
@@ -78,6 +83,12 @@ function editor:draw()
 	if editor.config.draw_registers then
 		editor.utility.gui:drawRegisters_Debug()
 	end
+	love.graphics.pop()
+	local mouse_position_x, mouse_position_y = love.mouse.getPosition()
+	mouse_position_x, mouse_position_y =
+		math.floor(mouse_position_x - editor.camera.x), math.floor(mouse_position_y - editor.camera.y)
+	mouse_position_label:setText("x: " .. mouse_position_x .. ", y: " .. mouse_position_y)
+	mouse_position_label.parent:draw()
 	love.graphics.pop()
 end
 

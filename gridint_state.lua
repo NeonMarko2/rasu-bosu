@@ -28,28 +28,10 @@ editor.export_requested.sub(function()
 	editor.level_data.int_grid = data
 end)
 
-local function createFrame()
-	local frame = frame(Udimen.new(0.5, 0.5, 0, 0), Udimen.new(0, 0, 200, 200), nil, {
-		label("This is a label", Udimen.new()),
-		label("This is a label", Udimen.new()),
-		checkBox(),
-		frame(Udimen.new(0.5, 0, 0, 0), Udimen.new(1, 0, 0, 30)),
-		frame(Udimen.new(), Udimen.new(1, 0, 0, 30)),
-	})
-	return frame
-end
-
 local current_int_label =
-	editor.utility.gui:newFrame(Udimen.new(), Udimen.new()):addElement(label(current_int, Udimen.new()))
-current_int_label.parent.fit_content = true
-current_int_label.parent.anchor = Vector.new(0, 1)
-
-local frame2 = createFrame()
-
-frame2["title"] = "Title"
-frame2.layout = 1
-
-frame2.anchor = Vector.new(0.5, 0.5)
+	frame(Udimen.new(), Udimen.new(), { fit_content = true, anchor = Vector.new(0, 1) }):addElement(
+		label(current_int, Udimen.new())
+	)
 
 local grid = editor.utility.grid.newGrid(40)
 
@@ -73,9 +55,6 @@ end
 
 function intState:draw()
 	local x, y = grid:mouseToGrid()
-	if editor.utility.gui.isOverUi() == false then
-		love.graphics.rectangle("fill", x * grid.cell_size, y * grid.cell_size, grid.cell_size, grid.cell_size)
-	end
 
 	if COLOR_OF_INT[current_int] then
 		love.graphics.setColor(COLOR_OF_INT[current_int])
@@ -98,7 +77,10 @@ function intState:draw()
 		end
 	end
 
-	frame2:draw()
+	love.graphics.setColor(1, 1, 1, 1)
+	if editor.utility.gui.isOverUi() == false then
+		love.graphics.rectangle("line", x * grid.cell_size, y * grid.cell_size, grid.cell_size, grid.cell_size)
+	end
 
 	editor.utility.state_name_label.elements[1]:setText("Integer Grid")
 	editor.utility.drawStateNameLabel()
