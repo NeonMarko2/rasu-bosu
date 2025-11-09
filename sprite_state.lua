@@ -1,7 +1,17 @@
 local sprite_state = editorState:extend()
 
+local frame = frame(
+	Udimen.new(0, 0, 15, 100),
+	Udimen.new(0, 0, 200, 200),
+	{ layout = 1 },
+	{ checkBox(), button(Udimen.new(), Udimen.new(0, 0, 50, 50), function()
+		error("Busted!")
+	end) }
+)
+
 function sprite_state:draw()
-	editor.state_information_to_display = "State Machine: Spriter Control"
+	frame:draw()
+	editor.state_information_to_display = "State Machine: Sprite Control"
 end
 
 return sprite_state

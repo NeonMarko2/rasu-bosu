@@ -4,6 +4,7 @@ require("editor_utils.gui.element")
 require("editor_utils.gui.label")
 require("editor_utils.gui.checkBox")
 require("editor_utils.gui.frame")
+require("editor_utils.gui.button")
 
 ---@class Region Regions are used for detecting mouse events at specified areas
 ---@field type string Determines whether the region will detect mouse events, or block them. Used on frames to prevent mouse inputs from going through them.
