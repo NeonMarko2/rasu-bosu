@@ -15,6 +15,10 @@ editor.utility = {}
 editor.utility.grid = require("editor_utils.grid")
 editor.utility.gui = require("editor_utils.gui")
 Udimen = require("editor_utils.gui.udimen")
+require("editor_state")
+
+local states = {}
+states[1] = require("gridint_state")()
 
 local editing_state = require("gridint_state")
 

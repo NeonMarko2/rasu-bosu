@@ -1,4 +1,4 @@
-local intState = {}
+local intState = editorState:extend()
 
 local grid_data = {}
 local current_int = 3
