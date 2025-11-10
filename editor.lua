@@ -64,6 +64,17 @@ end)
 
 function editor:load() end
 
+editor.file_dropped = Signal.new()
+editor.directory_dropped = Signal.new()
+
+function editor:fileDropped(file)
+	self.file_dropped(file)
+end
+
+function editor:directoryDropped(path)
+	self.directory_dropped(path)
+end
+
 function editor:update(dt)
 	local camera_move_x, camera_move_y = 0, 0
 	if love.keyboard.isDown("a") then

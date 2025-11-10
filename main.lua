@@ -14,6 +14,14 @@ function love.update(dt)
 	editor:update(dt)
 end
 
+function love.filedropped(file)
+	editor:fileDropped(file)
+end
+
+function love.directorydropped(path)
+	editor:directoryDropped(path)
+end
+
 function love.keypressed(key)
 	Input:sendInput(key, "began")
 
