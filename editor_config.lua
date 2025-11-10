@@ -1,3 +1,3 @@
-return{
-    draw_registers = false
+return {
+	draw_registers = true,
 }

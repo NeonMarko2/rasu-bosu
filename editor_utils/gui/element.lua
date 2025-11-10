@@ -17,7 +17,7 @@ function element:new(position, size)
 end
 
 function element:setRealSize()
-	parent_size = Vector.new(love.graphics.getWidth(), love.graphics.getHeight())
+	local parent_size = Vector.new(love.graphics.getWidth(), love.graphics.getHeight())
 	if self.parent then
 		parent_size = self.parent.real_size
 	end
@@ -30,6 +30,15 @@ function element:setRealSize()
 		parent_size.x * self.size.x_relative + self.size.x_absolute,
 		parent_size.y * self.size.y_relative + self.size.y_absolute
 	)
+	if self.region then
+		self.region.size = self.real_size
+		self.region.position = self.real_position
+	end
+	if self.elements then
+		for index, value in ipairs(self.elements) do
+			value:setRealSize()
+		end
+	end
 end
 
 function element:__newindex(key, value)
@@ -37,7 +46,7 @@ function element:__newindex(key, value)
 	if self.__ignore_newindex == true then
 		return
 	end
-	if key == "parent" or key == "position" then
+	if key == "parent" or key == "position" or key == "size" then
 		self:setRealSize()
 	end
 end

@@ -85,10 +85,10 @@ end
 
 local function drawElementsVertically(elements)
 	for _, element in ipairs(elements) do
-		element:draw()
 		if element.region then
 			gui.registerRegion(element.region)
 		end
+		element:draw()
 		love.graphics.translate(0, element.real_size.y)
 	end
 end
@@ -97,10 +97,10 @@ local function drawElementsAbsolute(elements)
 	for _, element in ipairs(elements) do
 		love.graphics.push()
 		love.graphics.translate(element.real_position.x, element.real_position.y)
-		element:draw()
 		if element.region then
 			gui.registerRegion(element.region)
 		end
+		element:draw()
 		love.graphics.pop()
 	end
 end
@@ -118,11 +118,11 @@ function frame:draw()
 
 	local x, y = love.graphics.transformPoint(0, 0)
 	self.region.position = Vector.new(x, y)
-	if self.region then
+	if self.region and self.parent == nil then
 		gui.registerRegion(self.region)
 	end
 
-	local content_offset = DEFAULT_FRAME_CONTENTS_OFFSET
+	local content_offset = self.padding or DEFAULT_FRAME_CONTENTS_OFFSET
 	local content_to_title_offset = Vector.new(0, 0)
 
 	if self.title then

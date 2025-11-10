@@ -34,7 +34,7 @@ local states = {}
 states[1] = require("gridint_state")()
 states[2] = require("tile_state")()
 
-local editing_state = states[1]
+local editing_state = states[2]
 
 Input.input_began.sub(function(key)
 	if key == "1" then
