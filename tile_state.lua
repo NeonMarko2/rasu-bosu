@@ -1,4 +1,4 @@
-local sprite_state = editorState:extend()
+local tile_state = editorState:extend()
 
 local frame = frame(
 	Udimen.new(0, 0, 15, 100),
@@ -9,9 +9,9 @@ local frame = frame(
 	end) }
 )
 
-function sprite_state:draw()
+function tile_state:draw()
 	frame:draw()
-	editor.state_information_to_display = "State Machine: Sprite Control"
+	editor.state_information_to_display = "State Machine: Tile Mode"
 end
 
-return sprite_state
+return tile_state

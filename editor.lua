@@ -32,7 +32,7 @@ local mouse_position_label =
 
 local states = {}
 states[1] = require("gridint_state")()
-states[2] = require("sprite_state")()
+states[2] = require("tile_state")()
 
 local editing_state = states[1]
 
